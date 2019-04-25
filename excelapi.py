@@ -30,44 +30,44 @@ def fetchDataFromDatabase(query):
 
 #Funcion para agregar la informacion de paciente en el archivo excel
 def addHeaderToExcelFile(worksheet,userID):
+    #Declaracion de variables
+    arregloDatosHeader=["User ID", "Nombre" , "Apellido" , "Sexo" , "Fecha Nacimiento" , "Rango" , "Email"]
     #llamar base de datos para conseguir la informacion del paciente
     data=fetchDataFromDatabase("SELECT * FROM usuario WHERE userID='"+userID+"'")
-    worksheet.write(0,0,"User ID")
-    worksheet.write(1,0,row[0])
-    worksheet.write(0,1,"Nombre Paciente")
-    worksheet.write(1,1,row[1]+" "+row[2])
-    worksheet.write(0,2,"Sexo")
-    worksheet.write(1,2,row[3])
-    worksheet.write(0,3,"Fecha de nacimiento")
-    worksheet.write(1,3,row[4])
-    worksheet.write(3,0,"Presion Diastolica")
-    worksheet.write(3,1,"Presion Sistolica")
+    row=data[0]
+    #Ciclo for para meter todo al woksheet
+    for i in range(0,len(arregloDatosHeader)):
+        worksheet.write(0,i,arregloDatosHeader[i])
+        worksheet.write(1,i,row[i])
+    #regresar el nuevo worksheet
+    return worksheet
+
+#Funcion para cargar los registros dentro del worksheet
+def loadUserDataIntoWorksheet(worksheet,userID):
+    #conseguir la informacion de la base de datos
+    data=fetchDataFromDatabase("SELECT * FROM presion WHERE pacienteID='"+userID+"'")
+    headerExcel=["ID","Presion Distolica","Presion Asistolica","Presion Distolica Manual","Presion Asistolica Manual"]
+    #agregar header
+    for i in range(0,len(headerExcel)):
+        worksheet.write(3,i,headerExcel[i])
+    #Declaracion del contador
+    cont=4
+    #CIclo for para iterar por lo que coneguimos
+    for row in data:
+        for i in range(0,len(row)-1):
+            worksheet.write(cont,i,row[i])
+    return worksheet
 
 #Declaracion de la funcion que regresara un archivo excel con los registros del usuario
 def getUserDataToExml(userID):
     #Creamos el archivo de excel
     workbook = xlsxwriter.Workbook(userID+'.xlsx')
     worksheet = workbook.add_worksheet()
-
-    #Preparamos el query en SQL para obtener el historial del usuario
-    query="SELECT * FROM preison WHERE pacienteID='"+userID+"'"
-    #try catch block para ver si tenemos un error durante el query
-    try:
-        cursor.execute(query)
-        row = cursor.fetchone()
-        #Metemos primero la informacion de paciente al archivo de excel
-        addHeaderToExcelFile(worksheet,userID)
-        cont = 4
-        #Ciclo for para iterar por los resultados y meterlos dentro del archivo de excel
-        while row is not None:
-            #aregar los datos a las celdas de excel
-            worksheet.write(cont,0,row[9])
-            worksheet.write(cont,1,row[10])
-            cont+=1
-            #Conseeguir el nuevo renglon
-            row = cursor.fetchone()
-        #Cerramos el archivo
-        workbook.close()
-    except:
+    #agregar header al archivo de excel
+    worksheet=addHeaderToExcelFile(worksheet,userID)
+    #agregar el historial de los pacientes
+    worksheet=loadUserDataIntoWorksheet(worksheet,userID)
+    #cerramos el archivo de excel
+    workbook.close()
 
 getUserDataToExml("14d62206-65df-11e9-9a2d-b827eb7fd899")
