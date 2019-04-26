@@ -1,13 +1,6 @@
 import xlsxwriter
 import MySQLdb
-#DECLARACION DE VARIABLES PARA LA BASE DE DATOS
-direcionIP="localhost"
-dbUsername="victor"
-dbPassword="password"
-databaseName="msva"
-
-#Establecer la conexion con la base de datos
-db = MySQLdb.connect(direcionIP,dbUsername,dbPassword,databaseName)
+import mysql_config
 
 #Funcion para mandar mensaje de error
 def sendErrorMssg(mssg):
@@ -68,22 +61,21 @@ def loadUserDataIntoWorksheet(worksheet,userID):
 
 #Declaracion de la funcion que regresara un archivo excel con los registros del usuario
 def getUserDataToExml(userID):
-    print("Generando archivo XLSX para usuario " + userID + "\n")
+    print("Generando archivo XLSX para usuario " + userID)
     #Creamos el archivo de excel
     workbook = xlsxwriter.Workbook(userID+'.xlsx')
     worksheet = workbook.add_worksheet()
-    print("Agregando Header con la informacion del paciente...\n")
+    print("Agregando Header con la informacion del paciente...")
     #agregar header al archivo de excel
     worksheet=addHeaderToExcelFile(worksheet,userID)
     if(worksheet==False):return sendErrorMssg("Error creando el header del archivo")
     #agregar el historial de los pacientes
-    print("Agregando historial del paciente...\n")
+    print("Agregando historial del paciente...")
     worksheet=loadUserDataIntoWorksheet(worksheet,userID)
     if(worksheet==False):return sendErrorMssg("Error insertando el historial del paciente")
     #cerramos el archivo de excel
-    print("Success!!...\n")
+    print("Success!!...")
     workbook.close()
-    print("Guardado en disco!\n")
+    print("Guardado en disco!")
     successJson={"success":"yes"}
     return successJson
-getUserDataToExml("14d62206-65df-11e9-9a2d-b827eb7fd899")
