@@ -1,31 +1,12 @@
 import xlsxwriter
-import MySQLdb
-import mysql_config
-
-#Funcion para mandar mensaje de error
-def sendErrorMssg(mssg):
-    returnJson = {"error":mssg}
-    return returnJson
-
-#Funcion para obtener informacion de la base de datos
-def fetchDataFromDatabase(query):
-    #Iniciamos el cursor dentro de nuestra base de datos
-    cursor=db.cursor()
-    #TRY CATCH BLOCK
-    try:
-        cursor.execute(query)
-        data = cursor.fetchall()
-        return data
-    except:
-        print("Error haciendo query a base de datos")
-        return False
+import mysql_config as mysql
 
 #Funcion para agregar la informacion de paciente en el archivo excel
 def addHeaderToExcelFile(worksheet,userID):
     #Declaracion de variables
     arregloDatosHeader=["User ID", "Nombre" , "Apellido" , "Sexo" , "Fecha Nacimiento" , "Rango" , "Email"]
     #llamar base de datos para conseguir la informacion del paciente
-    data=fetchDataFromDatabase("SELECT * FROM usuario WHERE userID='"+userID+"'")
+    data=mysql.fetchDataFromDatabase("SELECT * FROM usuario WHERE userID='"+userID+"'")
     #ver si tenemos datos
     if(data):
         row=data[0]
@@ -41,7 +22,7 @@ def addHeaderToExcelFile(worksheet,userID):
 #Funcion para cargar los registros dentro del worksheet
 def loadUserDataIntoWorksheet(worksheet,userID):
     #conseguir la informacion de la base de datos
-    data=fetchDataFromDatabase("SELECT * FROM presion WHERE pacienteID='"+userID+"'")
+    data=mysql.fetchDataFromDatabase("SELECT * FROM presion WHERE pacienteID='"+userID+"'")
     #Ver si tenemos data
     if(data):
         headerExcel=["ID","Presion Distolica","Presion Asistolica","Presion Distolica Manual","Presion Asistolica Manual"]
@@ -68,11 +49,11 @@ def getUserDataToExml(userID):
     print("Agregando Header con la informacion del paciente...")
     #agregar header al archivo de excel
     worksheet=addHeaderToExcelFile(worksheet,userID)
-    if(worksheet==False):return sendErrorMssg("Error creando el header del archivo")
+    if(worksheet==False):return mysql.sendErrorMssg("Error creando el header del archivo")
     #agregar el historial de los pacientes
     print("Agregando historial del paciente...")
     worksheet=loadUserDataIntoWorksheet(worksheet,userID)
-    if(worksheet==False):return sendErrorMssg("Error insertando el historial del paciente")
+    if(worksheet==False):return mysql.sendErrorMssg("Error insertando el historial del paciente")
     #cerramos el archivo de excel
     print("Success!!...")
     workbook.close()

@@ -2,6 +2,7 @@ from flask import Flask,jsonify
 from excelapi import getUserDataToExml
 from excelapi import sendErrorMssg
 from validateUser import validateUser
+from sendEmail import sendEmailToUser
 from flask_cors import CORS
 from flask import request
 
@@ -23,8 +24,8 @@ def summary():
             #Ver si ocurrio un error
             if 'error' in d:
                 return jsonify(d)
-            #TODO llamar funcion para enviar el correo con el archivo
-            
+            #llamar funcion para enviar el correo con el archivo
+            d=sendEmailToUser(requestedUserID,userID)
             return jsonify(d)
         else:
             return jsonify(sendErrorMssg("Error en los parametros POST"))
