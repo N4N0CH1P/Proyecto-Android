@@ -1,3 +1,4 @@
+import MySQLdb
 #DECLARACION DE VARIABLES PARA LA BASE DE DATOS
 direcionIP="localhost"
 dbUsername="victor"
