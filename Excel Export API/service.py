@@ -1,6 +1,6 @@
 from flask import Flask,jsonify
 from excelapi import getUserDataToExml
-from excelapi import sendErrorMssg
+from mysql_config import sendErrorMssg
 from validateUser import validateUser
 from sendEmail import sendEmailToUser
 from flask_cors import CORS
