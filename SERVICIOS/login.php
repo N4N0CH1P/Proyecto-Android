@@ -1,6 +1,8 @@
 <?php
 	//Iniciar session
 	session_start();
+	//Incluir configuracion de la base de datos
+	include("config.php");
 	//Incluir la clase usuario
 	include("class_usuario.php");
 	//ver si ya tenemos una session iniciada

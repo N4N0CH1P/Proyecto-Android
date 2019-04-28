@@ -1,8 +1,7 @@
 <?php
-	//Incluir configuracion de la base de datos
-	include("config.php");
 	class Usuario{
 		//Declaracion de los atributos
+		var $userID;
 		var $nombre;
 		var $apellido;
 		var $sexo;
@@ -10,6 +9,7 @@
 		var $rango;
 		var $email;
 		var $password;
+		var $userHistory;
 		//Declaracion del constructor
 		function __construct( $nombre, $apellido, $sexo, $fechaNacimiento, $rango, $email, $password ) {
   			$this->nombre=$nombre;
@@ -18,7 +18,8 @@
   			$this->fechaNacimiento=$fechaNacimiento;
   			$this->rango=$rango;
   			$this->email=$email;
-  			$this->password=$password;
+			$this->password=$password;
+			$this->userHistory= array();
 		}
 		//Declaracion de los metodos
 		//Metodo que regresa el nombre del usuario
@@ -49,6 +50,8 @@
 				$this->rango=$row["rango"];
 				$this->email=$row["email"];
 				$this->password=$row["password"];
+				//acutalizar el ID del usuario
+				$this->userID=$userID;
 				return true;
 			}else{
 				return false;
@@ -69,9 +72,45 @@
 				return true;
 				free($result);
 			}else{
-				return false;
 				free($result);
+				return false;
 			}
+		}
+		//metodo para llenar el historial del usuario
+		function populateUserHistory(){
+			//Declaracion de variables
+			global $conexionMySQL;
+			//Preparamos query
+			$query="SELECT * FROM presion WHERE pacienteID='".$this->userID."'";
+			//hacer query
+			$result=$conexionMySQL->query($query);
+			//ver si tenemos resultados
+			if($result){
+				//ciclo for para iterar por los valores
+				while($row=$result->fetch_assoc()){
+					//Creamos una nueva presion
+					$newPresion= new Presion($row["presionID"],$row["presionSist"],$row["presionDist"],$row["presionSistManual"],$row["presionDistManual"]);
+					array_push($this->userHistory,$newPresion);
+				}
+				return true;
+			}
+			else{
+				free($result);
+				return false;
+			}
+		}
+		//metodo para regresar el historial de las presiones en formato JSON
+		function getUserHistory(){
+			//Declaracion de variables
+			$returnJson="[";
+			//Ciclo for para iterar por el historial
+			for($i=0; $i<sizeof($this->userHistory); $i++){
+				$returnJson=$returnJson.$this->userHistory[$i]->getJsonString();
+				//si no estamos al final entonces meter la coma
+				if($i!=(sizeof($this->userHistory)-1)){$returnJson=$returnJson.",";}
+			}
+			$returnJson=$returnJson."]";
+			return $returnJson;
 		}
 	}
 ?>
