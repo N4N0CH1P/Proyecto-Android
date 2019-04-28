@@ -1,4 +1,6 @@
 <?php
+	//Incluir configuracion de la base de datos
+	include("config.php");
 	//Incluir la clase usuario
 	include("class_usuario.php");
 

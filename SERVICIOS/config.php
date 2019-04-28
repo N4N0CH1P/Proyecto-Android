@@ -8,7 +8,7 @@
 		echo json_encode($resultado);		
 	}
 	//Stat MySQL
-	$conexionMySQL =  new mysqli('127.0.0.1','msva','msvaDatabaseASV','msva');
+	$conexionMySQL =  new mysqli('127.0.0.1','msva','NWsVOiAWHPD8d6JB','msva');
 	//Condition if there is an MySQL error
 	if($conexionMySQL->connect_error){
 		mandarMensajeError("Error conectando con la base de datos: " .$conexionMySQL->connect_errno);
