@@ -19,4 +19,8 @@
         <item>H</item>
         <item>M</item>
     </string-array>
+    <string name="presiondist"></string>
+    <string name="presionasist"></string>
+    <string name="presiondistmanual"></string>
+    <string name="presionasistolicamanual"></string>
 </resources>

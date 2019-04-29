@@ -8,14 +8,14 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.net.URLEncoder
 
 class MainActivity : AppCompatActivity() {
@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun validateData(serviceResponse:String){
         //obtenemos los datos JSON del servicio para saber si fue un exito o fracaso el login
         var datosJson:JSONObject= JSONObject(serviceResponse)
