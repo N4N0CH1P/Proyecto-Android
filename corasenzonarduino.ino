@@ -192,15 +192,16 @@ void takepulse()
 
 void btsend()
 {
-//  btSerial.print(prevmillis);
-//  btSerial.print(";");
+  btSerial.print(prevmillis);
+  btSerial.print(";");
   btSerial.print(p, 3);
-//  btSerial.print(";");
-//  btSerial.println(pulse);
-//  Serial.print(prevmillis);
-//  Serial.print(";");
+  btSerial.print(";");
+  btSerial.println(pulse);
+  //btSerial.write("Testing...");
+  Serial.print(prevmillis);
+  Serial.print(";");
   Serial.print(p, 3);
-//  Serial.print(";");
-//  Serial.println(pulse);
+  Serial.print(";");
+  Serial.println(pulse);
 
 }
