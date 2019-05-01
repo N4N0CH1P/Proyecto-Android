@@ -89,7 +89,7 @@
 				//ciclo for para iterar por los valores
 				while($row=$result->fetch_assoc()){
 					//Creamos una nueva presion
-					$newPresion= new Presion($row["presionID"],$row["presionSist"],$row["presionDist"],$row["presionSistManual"],$row["presionDistManual"]);
+					$newPresion= new Presion($row["presionID"],$row["presionSist"],$row["presionDist"],$row["presionSistManual"],$row["presionDistManual"],$row["fecha"]);
 					array_push($this->userHistory,$newPresion);
 				}
 				return true;
