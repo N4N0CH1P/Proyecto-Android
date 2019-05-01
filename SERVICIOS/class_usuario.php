@@ -112,5 +112,20 @@
 			$returnJson=$returnJson."]";
 			return $returnJson;
 		}
+		//metodo para regresar la informacion del usuario en formato JSON como string
+		function getUserDataAsJsonString(){
+			//Declaracion de variables
+			$resultado = new \stdClass();
+			$resultado->userID=$this->userID;
+			$resultado->nombre=$this->nombre;
+			$resultado->apellido=$this->apellido;
+			$resultado->sexo=$this->sexo;
+			$resultado->fechaNacimiento=$this->fechaNacimiento;
+			$resultado->rango=$this->rango;
+			$resultado->email=$this->email;
+			$resultado->password=$this->password;
+			//Regresamos todo como string JSON
+			return json_encode($resultado);
+		}
 	}
 ?>
