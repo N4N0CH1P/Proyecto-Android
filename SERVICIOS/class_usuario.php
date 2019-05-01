@@ -111,7 +111,6 @@
 			}
 			$returnJson=$returnJson."]";
 			return $returnJson;
-<<<<<<< HEAD
 		}
 		//metodo para regresar la informacion del usuario en formato JSON como string
 		function getUserDataAsJsonString(){
@@ -127,8 +126,6 @@
 			$resultado->password=$this->password;
 			//Regresamos todo como string JSON
 			return json_encode($resultado);
-=======
->>>>>>> 4a9290ebec844021bf3ad97658350c4fcaad61ad
 		}
 	}
 ?>
