@@ -26,6 +26,10 @@
 		function getUserName(){
 			return $this->nombre." ".$this->apellido;
 		}
+		//funcion para regresar el ID del usuario
+		function getUserID(){
+			return $this->userID;
+		}
 		//Metodo para llenar informacion del usuario con query a la base de datos
 		function populateDataFromDatabase($userID){
 			//Declaracion de variables
