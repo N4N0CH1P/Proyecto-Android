@@ -16,6 +16,6 @@
         //Mandamos mensaje de error
         mandarMensajeError("Error, no se tiene datos POST necesarios");
         //DIE!!!
-        die();
+        die();s
     }
 ?>
