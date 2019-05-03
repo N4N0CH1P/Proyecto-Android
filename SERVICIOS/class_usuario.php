@@ -135,6 +135,7 @@
 		function getPacientes(){
 			//Declaracion de variables
 			$arrregloUsuarios=array();
+			global $conexionMySQL;
 			//preparar query
 			$query='SELECT pacienteID FROM atiendeA WHERE doctorID="'.$this->userID.'"';
 			//hacer query a base de datos
