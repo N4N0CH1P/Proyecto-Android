@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ProyectoFinal</string>
+    <string name="namePar">Nombre</string>
+    <string name="apellidoPar">Apellido</string>
+    <string name="fechaPar">Fecha Nacimiento</string>
+    <string name="passwordPar1">Contrasena</string>
+    <string name="passwordPar2">Repetir Contrasena</string>
+    <string name="emailPar">correo@dominio.com</string>
+    <string name="sexPar">Sexo</string>
+    <string-array name="sexosCompletos">
+        <item>Hombre</item>
+        <item>Mujer</item>
+    </string-array>
+    <string-array name="rangos">
+        <item>Paciente</item>
+        <item>Doctor</item>
+    </string-array>
+    <string-array name="sexos">
+        <item>H</item>
+        <item>M</item>
+    </string-array>
+</resources>
