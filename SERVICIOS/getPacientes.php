@@ -17,7 +17,7 @@
             if($i!=sizeof($arrayPacientes)-1){$returnJsonString=$returnJsonString.",";}
         }
         //regresamos el JSON
-        return $returnJsonString;
+        echo $returnJsonString;
     }else{
         //mandamos mensaje de error
         mandarMensajeError("Error, faltan datos POST para cumplir la conexion");
