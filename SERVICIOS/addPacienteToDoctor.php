@@ -12,6 +12,12 @@
         if(!$conexionMySQL->query($query)){
            mandarMensajeError("Error, no se pudo insertar el dato en la base de datos"); 
         }
+        else{
+            $resultado = new \stdClass();
+            $resultado->success="Paciente insertado con exito";
+            //despelgarlo
+            echo json_encode($resultado);	
+        }
 	}else{
         //Mandamos mensaje de error
         mandarMensajeError("Error, no se tiene datos POST necesarios");

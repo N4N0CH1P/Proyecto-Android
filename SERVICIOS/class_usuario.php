@@ -131,5 +131,31 @@
 			//Regresamos todo como string JSON
 			return json_encode($resultado);
 		}
+		//metodo que regresa los pacientes que atiende el usuario en formato JSON
+		function getPacientes(){
+			//Declaracion de variables
+			$arrregloUsuarios=array();
+			//preparar query
+			$query='SELECT pacienteID FROM atiendeA WHERE doctorID="'.$this->userID.'"';
+			//hacer query a base de datos
+			$result=$conexionMySQL->query($query);
+			//ver si tenemos resultados
+			if($result){
+				//iterar por los resultados
+				while($row=$result->fetch_assoc()){
+					//declara un nuevo Usuario
+					$newPaciente = new Usuario(null,null,null,null,null,null,null);
+					$newPaciente->populateDataFromDatabase($row["pacienteID"]);
+					//metemos el nuevo paciente al arreglo
+					array_push($arrregloUsuarios,$newPaciente);
+				}
+				//regresar el arreglo
+				return $arrregloUsuarios;
+			}else{
+				//mandar mensaje de error
+				mandarMensajeError("Error haciendo query a base de datos");
+				die();
+			}
+		}
 	}
 ?>
