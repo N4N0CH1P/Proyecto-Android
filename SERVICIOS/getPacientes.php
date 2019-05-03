@@ -16,6 +16,7 @@
             //ver si no es el ultimo
             if($i!=sizeof($arrayPacientes)-1){$returnJsonString=$returnJsonString.",";}
         }
+        $returnJsonString=$returnJsonString."]";
         //regresamos el JSON
         echo $returnJsonString;
     }else{
