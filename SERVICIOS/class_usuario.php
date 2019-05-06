@@ -165,7 +165,7 @@
 			//Prepramos query
 			$query="INSERT INTO presion(presionID, presionDist, presionSist, presionDistManual, presionSistManual, pacienteID, fecha) VALUES (".$presion->presionID.",".$presion->presionDiastolica.",".$presion->presionSistolica.",".$presion->presionDiastolicaManual.",".$presion->presionSistolicaManual.",'".$this->userID."','".$presion->fechaPresion."')";
 			//hacemos query al servidor
-			if($result=$conexionMySQL->query($query)){
+			if(!$result=$conexionMySQL->query($query)){
 				$resultado = new \stdClass();
 				$resultado->success="yes";
 				//despelgarlo
