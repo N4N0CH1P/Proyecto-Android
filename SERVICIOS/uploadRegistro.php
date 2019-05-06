@@ -13,8 +13,9 @@
             die();
         }
     }
+    $fecha= date('Y-m-d');
     //Creamos un nuevo objeto de la clase presion para meter todos los datos
-    $newPresion=new Presion($_POST["presionID"],$_POST["presionAsist"],$_POST["presionDist"],$_POST["presionAsistMan"],$_POST["presionDistMan"],getdate());
+    $newPresion=new Presion($_POST["presionID"],$_POST["presionAsist"],$_POST["presionDist"],$_POST["presionAsistMan"],$_POST["presionDistMan"],$fecha);
     //Creamos la instancia del usuario
     $myUser=new Usuario(null,null,null,null,null,null,null);
     $myUser->populateDataFromDatabase($_POST["userID"]);
