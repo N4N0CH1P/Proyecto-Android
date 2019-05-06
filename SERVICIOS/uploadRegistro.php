@@ -1,6 +1,7 @@
 <?php
     //Incluir las clases y los archivos de configuracion
     include("config.php");
+    include("class_presion.php");
     include("class_usuario.php"); 
     //Ver si tenemos parametros POST necesarios para completar la peticion
     $parametrosPost=array("email","password","presionDist","presionAsist","presionDistMan","presionAsistMan","userID","presionID");
