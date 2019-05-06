@@ -6,20 +6,6 @@ from email.MIMEBase import MIMEBase
 from email import Encoders
 import os
 
-#Declaracion de informacion del servidor
-emailServerAddressSMTP="mail.orbi.mx"
-SMTPPort=25
-smtpUsername="msva@orbi.mx"
-smtpPassword="msvaemail"
-
-#Declaracion de variables
-server = smtplib.SMTP(emailServerAddressSMTP, SMTPPort)
-#Logear en el servidor
-server.ehlo()
-server.starttls()
-server.ehlo()
-server.login(smtpUsername, smtpPassword)
-
 
 #Funcion para obtener la direccion de correo electronico de un userID
 def getUserEmailAddress(userID):
@@ -36,6 +22,18 @@ def getUserEmailAddress(userID):
         return None
 
 def sendEmailToUser(userIDData,userIDDest):
+    #Declaracion de informacion del servidor
+    emailServerAddressSMTP="mail.orbi.mx"
+    SMTPPort=25
+    smtpUsername="msva@orbi.mx"
+    smtpPassword="msvaemail"
+    #Declaracion de variables
+    server = smtplib.SMTP(emailServerAddressSMTP, SMTPPort)
+    #Logear en el servidor
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(smtpUsername, smtpPassword)
     #Conseguir el correo del usuario para obtener la direccion
     mail=getUserEmailAddress(userIDDest)
     if(mail):
