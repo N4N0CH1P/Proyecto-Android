@@ -6,7 +6,7 @@
     //Ver si tenemos parametros POST necesarios para completar la peticion
     $parametrosPost=array("email","password","presionDist","presionAsist","presionDistMan","presionAsistMan","userID","presionID");
     for($i=0; $i < sizeof($parametrosPost); $i++){
-        if(!isset($parametrosPost[$i])){
+        if(!isset($_POST[$parametrosPost[$i]])){
             //mandar mensaje error
             mandarMensajeError("Error, no se tienen datos post necesarios");
             //DIE!!
