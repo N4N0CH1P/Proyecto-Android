@@ -14,6 +14,7 @@ import com.edgardo.corasensor.activities.HistorialActivity
 import com.edgardo.corasensor.activities.LoginActivity
 import com.edgardo.corasensor.activities.MisPacientesAct
 import com.edgardo.corasensor.activities.MyInfoAct
+import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONObject
@@ -31,6 +32,7 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+
         //Declaracion de variables
         //BOTONES
         var botonSesion: Button = findViewById(R.id.botonSesion)
@@ -45,6 +47,7 @@ class MenuActivity : AppCompatActivity() {
             myCurrentUser=savedInstanceState?.getParcelable(USER)
             populateUserData()
         }
+
         //Obtener los datos de usuario de servicio web
         if(NetworkConnection.isNetworkConnected(this)) {
             if(myCurrentUser==null){
@@ -55,10 +58,23 @@ class MenuActivity : AppCompatActivity() {
         }
         //Listener para el boton de login
         botonSesion.setOnClickListener {
-            //Preparamos el intent
-            var intent: Intent = Intent(this, LoginActivity::class.java)
-            //ejecutramos el intent para un activity on result
-            startActivityForResult(intent,0)
+            //LOGIN
+            if (myCurrentUser == null)
+            {
+                botonSesion.setText("LOGOUT")
+                //Preparamos el intent
+                var intent: Intent = Intent(this, LoginActivity::class.java)
+                //ejecutramos el intent para un activity on result
+                startActivityForResult(intent,0)
+            }
+            //LOGOUT
+            else
+            {
+                botonSesion.setText("INICIAR SESION")
+                myCurrentUser = null
+                textoNombreUsuario.setText("No tienes sesion iniciada")
+            }
+
         }
         //listener para el boton de historial
         botoInConsultaHistorial.setOnClickListener{
@@ -111,7 +127,20 @@ class MenuActivity : AppCompatActivity() {
         //agregar listener a boton registrar nueva presion
         botonNuevaPresion.setOnClickListener {
             var intent:Intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            //agregar usuario al intent
+            //Checar si se ha iniciado sesion
+            if (myCurrentUser == null)
+            {
+                intent.putExtra(MenuActivity.USER, Usuario("", "", "",
+                        'M', "", "", "", ""))
+                startActivity(intent)
+            }
+            else
+            {
+                intent.putExtra(MenuActivity.USER,myCurrentUser)
+                startActivity(intent)
+            }
+
         }
     }
     //Funcion para obtener los datos del usuario

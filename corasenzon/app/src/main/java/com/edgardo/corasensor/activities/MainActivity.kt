@@ -34,6 +34,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.HeartAssistantApplication
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.Scan.Scan
@@ -58,6 +60,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         const val SCAN_KEY: String = "SCAN_KEY"
         // BT code permission
         const val BLUETOOTH_REQUEST_PERMISSION = 1001
+
+        const val USER = "user"
     }
 
     val scanListFragment = scanListFragment()
@@ -66,6 +70,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //RECIBIR AL USUARIO SI ES QUE HAY
+        var data = intent.extras
+        if(data!=null){
+            //conseguimos el elemento Paciente
+            var paciente: Usuario = data.getParcelable(MenuActivity.USER)
+
+            if (paciente.nombre != "")
+            {
+                //Imprimimos la info del paciente
+                Toast.makeText(this, "Sesión iniciada como " + paciente.nombre + " " +
+                        paciente.apellido, Toast.LENGTH_LONG).show()
+            }
+
+        }
 
         bt_connect = BluetoothConnection(this)
 

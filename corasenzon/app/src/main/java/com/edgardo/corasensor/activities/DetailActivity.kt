@@ -26,6 +26,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.Scan.Scan
 import com.edgardo.corasensor.database.ScanDatabase
@@ -46,11 +47,22 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     lateinit var extras: Bundle
     lateinit var instanceDatabase: ScanDatabase
     lateinit var scanRec: Scan
-
+    lateinit var paciente: Usuario
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
         extras = intent.extras ?: return
+
+        paciente = extras.getParcelable(MenuActivity.USER)
+
+        if (paciente.nombre != "")
+        {
+            //Imprimimos la info del paciente
+            Toast.makeText(this, "Sesión iniciada como " + paciente.nombre + " " +
+                    paciente.apellido, Toast.LENGTH_LONG).show()
+        }
+
         instanceDatabase = ScanDatabase.getInstance(this)
 
         scanRec = extras.getParcelable(MainActivity.SCAN_KEY)!!
@@ -80,7 +92,6 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     Executor.ioThread {
                         scanRec.pressureSystolicManual = text_systolic_manual.text.toString().toDouble()
                         scanRec.pressureDiastolicManual = text_diastolic_manual.text.toString().toDouble()
-                        scanRec.pressureAvgManual = (text_systolic_manual.text.toString().toDouble() + (2 * text_diastolic_manual.text.toString().toDouble()))/3
                         scanRec.idManual = text_identifier.text.toString()
 
                         instanceDatabase.scanDao().updateScan(scanRec)
@@ -89,24 +100,36 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                             finish()
                         }
                     }
-                    /*
+
+
                     //ver si tenemos conexion a Internet
-                    if(NetworkConnection.isNetworkConnected(this)){
+                    if(NetworkConnection.isNetworkConnected(this) &&
+                            NetworkConnection.isNetworkAvailable(this)){
                         //Preparar los datos POST para mandar lllamar la funcion del registro
                         var datosPost:String = ""
                         //Llenar datos
+                        datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
+                                URLEncoder.encode(paciente.email.toString(), "UTF-8")
                         datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
-                                URLEncoder.encode(passwd1.text.toString(), "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("rango", "UTF-8") + "=" +
-                                URLEncoder.encode(rango, "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("sexo", "UTF-8") + "=" +
-                                URLEncoder.encode(sexo.toString(), "UTF-8")
+                                URLEncoder.encode(paciente.password.toString(), "UTF-8")+"&"
+                        datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
+                                URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
+                        datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
+                                URLEncoder.encode(text_pressure_systolic.text.toString(), "UTF-8")+"&"
+                        datosPost+= URLEncoder.encode("presionDistMan", "UTF-8") + "=" +
+                                URLEncoder.encode(text_diastolic_manual.text.toString(), "UTF-8")+"&"
+                        datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
+                                URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
+                        datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
+                                URLEncoder.encode(paciente.userID, "UTF-8")+"&"
+                        datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
+                                URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
                         //llamar la funcion para registrar usuario
-                        registerUser(datosPost)
+                        registerPresion(datosPost)
                     }
                     else{
                         Toast.makeText(this, "No se encontró la conexion a Internet", Toast.LENGTH_LONG).show()
-                    }*/
+                    }
                 }else{
                     Toast.makeText(applicationContext, "Hay campos sin llenar", Toast.LENGTH_LONG).show()
                 }
@@ -143,7 +166,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
     private fun registerPresion(presionData:String){
-        val serviceURL = NetworkConnection.buildUrl("register.php") //COMO SE LLAMA EL SERVICIO
+        val serviceURL = NetworkConnection.buildUrl("uploadRegistro.php") //COMO SE LLAMA EL SERVICIO
         doAsync {
             //Abrir la conexion con el servicio web
             with(serviceURL.openConnection() as HttpURLConnection) {
@@ -164,29 +187,19 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     //cerramos conexion con el servicio
                     it.close()
                     uiThread {
-                        //verifyRegister(respuestaServicio.toString())
+                        var objetoJSON:JSONObject=JSONObject(respuestaServicio.toString())
+                        //ver si tenemos error
+                        if (objetoJSON.has("error")){
+                            //desplegar toast con mensaje de error del servidor
+                            Toast.makeText(this@DetailActivity, objetoJSON.getString("error"), Toast.LENGTH_LONG).show()
+                        }
+                        else{
+                            Toast.makeText(this@DetailActivity, objetoJSON.getString("success"), Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }
         }
     }
-/*
-    //Funcion que verifica el registro con lo que contesta el servicio
-    private fun verifyRegister(respuestaServicio:String){
-        //declaracion de variables
-        var objetoJsonRespuesta: JSONObject = JSONObject(respuestaServicio)
-        //ver si tenemos succes
-        if(objetoJsonRespuesta.has("success")){
-            //regresar los datos nuevos del usuario para el login
-            val returnIntent = Intent()
-            returnIntent.putExtra(LoginActivity.EMAIL, email)
-            returnIntent.putExtra(LoginActivity.PASSWORD,password)
-            setResult(Activity.RESULT_OK, returnIntent)
-            finish()
-        }
-        else{
-            Toast.makeText(this, objetoJsonRespuesta.getString("error"), Toast.LENGTH_LONG).show()
-        }
-    }
-    */
+
 }

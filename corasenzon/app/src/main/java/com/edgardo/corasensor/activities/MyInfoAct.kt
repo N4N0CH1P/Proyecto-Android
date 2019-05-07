@@ -19,7 +19,7 @@ class MyInfoAct : AppCompatActivity() {
         var textEmail: TextView = findViewById(R.id.textEmail1)
         var textSexo: TextView = findViewById(R.id.textSexo1)
         var textRango: TextView = findViewById(R.id.textRango)
-        var textFechaNacimiento: TextView = findViewById(R.id.textRango)
+        var textFechaNacimiento: TextView = findViewById(R.id.textFechaNacimiento1)
         //Ver si tenemos datos del intent
         var data = intent.extras
         if(data!=null){
@@ -30,7 +30,7 @@ class MyInfoAct : AppCompatActivity() {
             textNombre.text=myUser.nombre+" "+myUser.apellido
             textEmail.text=myUser.email
             textSexo.text=myUser.sexo.toString()
-            textRango.text=myUser.rango
+            textRango.text=myUser.rango.toString()
             textFechaNacimiento.text=myUser.fechaNacimiento
             //Usar picaso para generar el codigo QR para ponerlo en el image view
             //cargar imagen con picaso
