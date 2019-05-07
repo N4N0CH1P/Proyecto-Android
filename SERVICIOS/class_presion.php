@@ -7,13 +7,15 @@
         var $presionDiastolica;
         var $presionSistolicaManual;
         var $presionDiastolicaManual;
+        var $fechaPresion;
         //Declaracion del constructor default
-        function __construct($presionID,$presionSistolica,$presionDiastolica,$presionSistolicaManual,$presionDiastolicaManual){
+        function __construct($presionID,$presionSistolica,$presionDiastolica,$presionSistolicaManual,$presionDiastolicaManual,$fechaPresion){
             $this->presionID=$presionID;
             $this->presionSistolica=$presionSistolica;
             $this->presionDiastolica=$presionDiastolica;
             $this->presionSistolicaManual=$presionSistolicaManual;
             $this->presionDiastolicaManual=$presionDiastolicaManual;
+            $this->fechaPresion=$fechaPresion;
         }
         //metodo para parsear a json los datos
         function getJsonString(){
@@ -24,6 +26,7 @@
             $resultado->presionDiastolica=$this->presionDiastolica;
             $resultado->presionSistolicaManual=$this->presionSistolicaManual;
             $resultado->presionDiastolicaManual=$this->presionDiastolicaManual;
+            $resultado->fecha=$this->fechaPresion;
             //regresar el string del objeto JSON
             return json_encode($resultado);
         }

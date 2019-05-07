@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                             android:layout_height="match_parent">
+
+
+    <ImageView
+            android:layout_width="91dp"
+            android:layout_height="80dp" app:srcCompat="@android:drawable/btn_star_big_on"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp" android:layout_marginStart="16dp" android:id="@+id/imageView2"/>
+    <TextView
+            android:text="Fecha"
+            android:layout_width="274dp"
+            android:layout_height="24dp" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp" android:id="@+id/textFechaToma"
+            app:layout_constraintStart_toEndOf="@+id/imageView2" android:layout_marginStart="12dp"/>
+    <TextView
+            android:text="Presion Manual"
+            android:layout_width="123dp"
+            android:layout_height="23dp"
+            android:id="@+id/textHolder1"
+            app:layout_constraintStart_toEndOf="@+id/imageView2" android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp" app:layout_constraintTop_toBottomOf="@+id/textHolder"/>
+    <TextView
+            android:text="Presion"
+            android:layout_width="123dp"
+            android:layout_height="23dp"
+            android:id="@+id/textHolder"
+            app:layout_constraintStart_toEndOf="@+id/imageView2" android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp" app:layout_constraintTop_toBottomOf="@+id/textFechaToma"/>
+    <TextView
+            android:text="00/00"
+            android:layout_width="123dp"
+            android:layout_height="23dp"
+            android:id="@+id/textPresionManual"
+            app:layout_constraintStart_toEndOf="@+id/textHolder" android:layout_marginStart="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/textFechaToma" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/textPresion"/>
+    <TextView
+            android:text="00/00"
+            android:layout_width="123dp"
+            android:layout_height="23dp"
+            android:id="@+id/textPresion"
+            android:layout_marginTop="4dp" app:layout_constraintTop_toBottomOf="@+id/textFechaToma"
+            app:layout_constraintStart_toEndOf="@+id/textHolder" android:layout_marginStart="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/textFechaToma" android:layout_marginEnd="8dp"/>
+</android.support.constraint.ConstraintLayout>

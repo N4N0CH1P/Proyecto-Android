@@ -7,23 +7,20 @@
     include("class_presion.php");
 	//Incluir la clase usuario
 	include("class_usuario.php");
-    //ver si tenemos una session inciada
-    if(isset($_SESSION["user"])){
-        //conseguir el user ID de los datos POST
-        if(!isset($_POST["userID"])){
-            mandarMensajeError("Error en los datos POST");
-            die();
-        }
-        //Declaracion de variables
-        $usuario = new Usuario(null,null,null,null,null,null,null);
-        //obtener la informacion del usuario
-        $usuario->populateDataFromDatabase($_POST["userID"]);
-        //conseguir el historial
-        $usuario->populateUserHistory();
-        //desplegar el JSON
-        echo $usuario->getUserHistory();
-    }else{
-        mandarMensajeError("Error, no se tiene session iniciada actualmente");
+	//Ver si tenemos datos post
+	if(!(isset($_POST["email"])&&isset($_POST["password"])&&isset($_POST["userID"]))){
+        mandarMensajeError("Error, No se tienen datos post suficientes");
         die();
     }
+    //ver si los datos de login son correctos
+    validateUserAndPassword($_POST["email"],$_POST["password"]);
+    //Declaracion de variables
+    $usuario = new Usuario(null,null,null,null,null,null,null);
+    //obtener la informacion del usuario
+    $usuario->populateDataFromDatabase($_POST["userID"]);
+    //conseguir el historial
+    $usuario->populateUserHistory();
+    //desplegar el JSON
+    echo $usuario->getUserHistory();   
 ?>
+

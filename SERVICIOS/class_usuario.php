@@ -26,6 +26,10 @@
 		function getUserName(){
 			return $this->nombre." ".$this->apellido;
 		}
+		//funcion para regresar el ID del usuario
+		function getUserID(){
+			return $this->userID;
+		}
 		//Metodo para llenar informacion del usuario con query a la base de datos
 		function populateDataFromDatabase($userID){
 			//Declaracion de variables
@@ -89,7 +93,7 @@
 				//ciclo for para iterar por los valores
 				while($row=$result->fetch_assoc()){
 					//Creamos una nueva presion
-					$newPresion= new Presion($row["presionID"],$row["presionSist"],$row["presionDist"],$row["presionSistManual"],$row["presionDistManual"]);
+					$newPresion= new Presion($row["presionID"],$row["presionSist"],$row["presionDist"],$row["presionSistManual"],$row["presionDistManual"],$row["fecha"]);
 					array_push($this->userHistory,$newPresion);
 				}
 				return true;
@@ -111,6 +115,66 @@
 			}
 			$returnJson=$returnJson."]";
 			return $returnJson;
+		}
+		//metodo para regresar la informacion del usuario en formato JSON como string
+		function getUserDataAsJsonString(){
+			//Declaracion de variables
+			$resultado = new \stdClass();
+			$resultado->userID=$this->userID;
+			$resultado->nombre=$this->nombre;
+			$resultado->apellido=$this->apellido;
+			$resultado->sexo=$this->sexo;
+			$resultado->fechaNacimiento=$this->fechaNacimiento;
+			$resultado->rango=$this->rango;
+			$resultado->email=$this->email;
+			$resultado->password=$this->password;
+			//Regresamos todo como string JSON
+			return json_encode($resultado);
+		}
+		//metodo que regresa los pacientes que atiende el usuario en formato JSON
+		function getPacientes(){
+			//Declaracion de variables
+			$arrregloUsuarios=array();
+			global $conexionMySQL;
+			//preparar query
+			$query='SELECT pacienteID FROM atiendeA WHERE doctorID="'.$this->userID.'"';
+			//hacer query a base de datos
+			$result=$conexionMySQL->query($query);
+			//ver si tenemos resultados
+			if($result){
+				//iterar por los resultados
+				while($row=$result->fetch_assoc()){
+					//declara un nuevo Usuario
+					$newPaciente = new Usuario(null,null,null,null,null,null,null);
+					$newPaciente->populateDataFromDatabase($row["pacienteID"]);
+					//metemos el nuevo paciente al arreglo
+					array_push($arrregloUsuarios,$newPaciente);
+				}
+				//regresar el arreglo
+				return $arrregloUsuarios;
+			}else{
+				//mandar mensaje de error
+				mandarMensajeError("Error haciendo query a base de datos");
+				die();
+			}
+		}
+		//metodo para subir una nueva presion al servidor
+		function uploadNewPresionToDb($presion){
+			//Declaracion de variables
+			global $conexionMySQL;
+			//Prepramos query
+			$query="INSERT INTO presion(presionID, presionDist, presionSist, presionDistManual, presionSistManual, pacienteID, fecha) VALUES (".$presion->presionID.",".$presion->presionDiastolica.",".$presion->presionSistolica.",".$presion->presionDiastolicaManual.",".$presion->presionSistolicaManual.",'".$this->userID."','".$presion->fechaPresion."')";
+			//hacemos query al servidor
+			if($result=$conexionMySQL->query($query)){
+				$resultado = new \stdClass();
+				$resultado->success="yes";
+				//despelgarlo
+				echo json_encode($resultado);
+			}
+			else{
+				//mandar mensaje de error
+				mandarMensajeError("Error insertando datos a la base de datos");
+			}
 		}
 	}
 ?>
