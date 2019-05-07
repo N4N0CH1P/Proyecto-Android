@@ -29,11 +29,11 @@ class RegisterWindow : AppCompatActivity() {
         var sexo:Char = 'H'
         var botonRegistro: Button = findViewById(R.id.buttonRegister)
         var arrayIds: Array<Int> = arrayOf(R.id.editNombre,R.id.editApellido,
-                R.id.editEmail,R.id.editFechaNacimiento)
+                R.id.editEmail)
         var passwd1: EditText = findViewById(R.id.editPassword)
         var passwd2: EditText = findViewById(R.id.editPassword2)
         var arrayInputs: MutableList<EditText> = mutableListOf()
-        var arrayLlavesPost: Array<String> = arrayOf("nombre","apellido","email","fechaNacimiento")
+        var arrayLlavesPost: Array<String> = arrayOf("nombre","apellido","email", "dia", "mes", "año")
         for(i in 0 until arrayIds.size){ arrayInputs.add(findViewById(arrayIds[i]))}
         var spinnerRango: Spinner = findViewById(R.id.spinnerRango)
         var spinnerSexo: Spinner = findViewById(R.id.spinnerSexo)
@@ -50,7 +50,7 @@ class RegisterWindow : AppCompatActivity() {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //Actualizar el valor del rango
-                rango=arregloRangos.get(position)
+                rango = arregloRangos.get(position)
             }
         }
         //agregar listener para el spinner del sexo
