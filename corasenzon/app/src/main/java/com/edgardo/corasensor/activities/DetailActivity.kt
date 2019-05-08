@@ -94,50 +94,18 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
                     //ver si tenemos conexion a Internet
 
-                        var email:String = ""
-                        try
-                        {
-                            var fin = FileReader(File(this.filesDir, "email.txt"))
-                            var c:Int?
-                            do
-                            {
-                                c = fin.read()
-                                email += c.toChar()
-                            } while(c!=-1)
-                        } catch (e:Exception)
-                        {
-                            print(e.message)
-                        }
+                    var email:String = ""
+                    var fine = FileReader(File(this.filesDir, "user.txt"))
+                    email = fine.readText()
 
-                        var password:String = ""
-                        try
-                        {
-                            var fin = FileReader(File(this.filesDir, "password.txt"))
-                            var c:Int?
-                            do
-                            {
-                                c = fin.read()
-                                password += c.toChar()
-                            } while(c!=-1)
-                        } catch (e:Exception)
-                        {
-                            print(e.message)
-                        }
+                    var password:String = ""
+                    var finp = FileReader(File(this.filesDir, "user.txt"))
+                    password = finp.readText()
 
                     var userID:String = ""
-                    try
-                    {
-                        var fin = FileReader(File(this.filesDir, "user.txt"))
-                        var c:Int?
-                        do
-                        {
-                            c = fin.read()
-                            userID += c.toChar()
-                        } while(c!=-1)
-                    } catch (e:Exception)
-                    {
-                        print(e.message)
-                    }
+                    var fin = FileReader(File(this.filesDir, "user.txt"))
+                    userID = fin.readText()
+
                         //Preparar los datos POST para mandar lllamar la funcion del registro
                         var datosPost:String = ""
                         //Llenar datos

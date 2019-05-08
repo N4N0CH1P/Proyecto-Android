@@ -74,27 +74,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //RECIBIR AL USUARIO SI ES QUE HAY
         var data = intent.extras
-        if(data!=null){
             //conseguimos el elemento Paciente
             var paciente: Usuario = data.getParcelable(MenuActivity.USER)
 
-            var userID:String = ""
-            try
-            {
-                var fin = FileReader(File(this.filesDir, "user.txt"))
-                var c:Int?
-                do
-                {
-                    c = fin.read()
-                    userID += c.toChar()
-                } while(c!=-1)
-                Toast.makeText(this, userID, Toast.LENGTH_LONG)
-            } catch (e:Exception)
-            {
-                print(e.message)
-            }
 
-        }
 
         bt_connect = BluetoothConnection(this)
 
