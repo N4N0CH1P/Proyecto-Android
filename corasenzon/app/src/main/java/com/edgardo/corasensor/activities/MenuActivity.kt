@@ -5,6 +5,7 @@ import com.edgardo.corasensor.networkUtility.NetworkConnection
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -18,9 +19,7 @@ import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URLEncoder
 
@@ -197,6 +196,8 @@ class MenuActivity : AppCompatActivity() {
                 //conseguir el usuario y meterlo dentro de nuestro objeto
                 email=data.getStringExtra(LoginActivity.EMAIL)
                 password=data.getStringExtra(LoginActivity.PASSWORD)
+                WriteToFile(email, "email.txt")
+                WriteToFile(password, "password.txt")
                 //llenar la informacion del usuario
                 getMyDataFromService()
             }
@@ -225,11 +226,45 @@ class MenuActivity : AppCompatActivity() {
         super.onSaveInstanceState(savedInstanceState)
         if(myCurrentUser!=null){
             savedInstanceState?.putParcelable(USER,myCurrentUser)
+            WriteToFile(myCurrentUser?.userID.toString(), "user.txt")
         }
         else{
             savedInstanceState?.putParcelable(USER,null)
         }
     }
+
+    public fun WriteToFile(text:String, fileName:String)
+    {
+        try
+        {
+            var fo = FileWriter(File(this.filesDir, fileName))
+            fo.use { it.write(text) }
+            fo.close()
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    public fun ReadFromFile(fileName:String)
+    {
+        var text:String = ""
+        try
+        {
+            var fin = FileReader(File(this.filesDir, fileName))
+            var c:Int?
+            do
+            {
+                c = fin.read()
+                text += c.toChar()
+            } while(c!=-1)
+        } catch (e:Exception)
+        {
+            print(e.message)
+        }
+    }
+
     //Declaracion del companion object
     companion object{
         val USER:String="user"

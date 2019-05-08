@@ -5,14 +5,34 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.edgardo.corasensor.R
 import com.squareup.picasso.Picasso
+import java.io.File
+import java.io.FileReader
+import java.io.InputStream
 
 class MyInfoAct : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_info)
+
+        var text:String = ""
+        try
+        {
+            var fin = FileReader(File(this.filesDir, "email.txt"))
+            var c:Int?
+            do
+            {
+                c = fin.read()
+                text += c.toChar()
+            } while(c!=-1)
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+        } catch (e:Exception)
+        {
+            print(e.message)
+        }
         //Declaracion de variables
         var imagenCodigoQr:ImageView= findViewById(R.id.imagenCodigoQR)
         var textNombre: TextView = findViewById(R.id.textFecha)

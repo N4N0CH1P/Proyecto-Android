@@ -48,6 +48,8 @@ import com.edgardo.corasensor.networkUtility.Executor.Companion.ioThread
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_start_scan.*
+import java.io.File
+import java.io.FileReader
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     val _tag = "MainApp"
@@ -76,11 +78,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             //conseguimos el elemento Paciente
             var paciente: Usuario = data.getParcelable(MenuActivity.USER)
 
-            if (paciente.nombre != "")
+            var userID:String = ""
+            try
             {
-                //Imprimimos la info del paciente
-                Toast.makeText(this, "Sesión iniciada como " + paciente.nombre + " " +
-                        paciente.apellido, Toast.LENGTH_LONG).show()
+                var fin = FileReader(File(this.filesDir, "user.txt"))
+                var c:Int?
+                do
+                {
+                    c = fin.read()
+                    userID += c.toChar()
+                } while(c!=-1)
+                Toast.makeText(this, userID, Toast.LENGTH_LONG)
+            } catch (e:Exception)
+            {
+                print(e.message)
             }
 
         }

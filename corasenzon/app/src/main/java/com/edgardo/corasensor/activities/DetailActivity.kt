@@ -37,9 +37,7 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URLEncoder
 
@@ -47,21 +45,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     lateinit var extras: Bundle
     lateinit var instanceDatabase: ScanDatabase
     lateinit var scanRec: Scan
-    lateinit var paciente: Usuario
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
         extras = intent.extras ?: return
-
-        paciente = extras.getParcelable(MenuActivity.USER)
-
-        if (paciente.nombre != "")
-        {
-            //Imprimimos la info del paciente
-            Toast.makeText(this, "Sesión iniciada como " + paciente.nombre + " " +
-                    paciente.apellido, Toast.LENGTH_LONG).show()
-        }
 
         instanceDatabase = ScanDatabase.getInstance(this)
 
@@ -77,6 +65,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         disableEditText(text_pressure_systolic)
         disableEditText(text_pressure_diastolic)
+
 
         button_dont_save.setOnClickListener { onClick(it) }
 
@@ -102,16 +91,60 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     }
 
 
+
                     //ver si tenemos conexion a Internet
-                    if(NetworkConnection.isNetworkConnected(this) &&
-                            NetworkConnection.isNetworkAvailable(this)){
+
+                        var email:String = ""
+                        try
+                        {
+                            var fin = FileReader(File(this.filesDir, "email.txt"))
+                            var c:Int?
+                            do
+                            {
+                                c = fin.read()
+                                email += c.toChar()
+                            } while(c!=-1)
+                        } catch (e:Exception)
+                        {
+                            print(e.message)
+                        }
+
+                        var password:String = ""
+                        try
+                        {
+                            var fin = FileReader(File(this.filesDir, "password.txt"))
+                            var c:Int?
+                            do
+                            {
+                                c = fin.read()
+                                password += c.toChar()
+                            } while(c!=-1)
+                        } catch (e:Exception)
+                        {
+                            print(e.message)
+                        }
+
+                    var userID:String = ""
+                    try
+                    {
+                        var fin = FileReader(File(this.filesDir, "user.txt"))
+                        var c:Int?
+                        do
+                        {
+                            c = fin.read()
+                            userID += c.toChar()
+                        } while(c!=-1)
+                    } catch (e:Exception)
+                    {
+                        print(e.message)
+                    }
                         //Preparar los datos POST para mandar lllamar la funcion del registro
                         var datosPost:String = ""
                         //Llenar datos
                         datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
-                                URLEncoder.encode(paciente.email.toString(), "UTF-8")
+                                URLEncoder.encode(email, "UTF-8")+"&"
                         datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
-                                URLEncoder.encode(paciente.password.toString(), "UTF-8")+"&"
+                                URLEncoder.encode(password, "UTF-8")+"&"
                         datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
                                 URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
                         datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
@@ -121,15 +154,12 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                         datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
                                 URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
                         datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
-                                URLEncoder.encode(paciente.userID, "UTF-8")+"&"
+                                URLEncoder.encode(userID, "UTF-8")+"&"
                         datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
                                 URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
                         //llamar la funcion para registrar usuario
                         registerPresion(datosPost)
-                    }
-                    else{
-                        Toast.makeText(this, "No se encontró la conexion a Internet", Toast.LENGTH_LONG).show()
-                    }
+
                 }else{
                     Toast.makeText(applicationContext, "Hay campos sin llenar", Toast.LENGTH_LONG).show()
                 }
