@@ -5,7 +5,7 @@ import com.edgardo.corasensor.networkUtility.NetworkConnection
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -54,6 +54,7 @@ class MenuActivity : AppCompatActivity() {
             }
         }else{
             Toast.makeText(this, "No se tiene conexion a Internet", Toast.LENGTH_LONG).show()
+            loginButton.text = "Log In"
         }
         //Listener para el boton de login
         botonSesion.setOnClickListener {
@@ -200,6 +201,10 @@ class MenuActivity : AppCompatActivity() {
                 WriteToFile(password, "password.txt")
                 //llenar la informacion del usuario
                 getMyDataFromService()
+
+                //Se verifica si es doctor para desplegar el boton de lista de pacientes
+                if(myCurrentUser!!.rango != "Doctor")
+                    botonMisPacientes.visibility = View.INVISIBLE
             }
         }
     }
@@ -232,7 +237,6 @@ class MenuActivity : AppCompatActivity() {
             savedInstanceState?.putParcelable(USER,null)
         }
     }
-
     public fun WriteToFile(text:String, fileName:String)
     {
         try
@@ -264,7 +268,11 @@ class MenuActivity : AppCompatActivity() {
             print(e.message)
         }
     }
-
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        myCurrentUser = savedInstanceState?.getParcelable(USER)
+        populateUserData()
+    }
     //Declaracion del companion object
     companion object{
         val USER:String="user"

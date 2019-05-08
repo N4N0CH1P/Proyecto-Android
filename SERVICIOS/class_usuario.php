@@ -158,5 +158,23 @@
 				die();
 			}
 		}
+		//metodo para subir una nueva presion al servidor
+		function uploadNewPresionToDb($presion){
+			//Declaracion de variables
+			global $conexionMySQL;
+			//Prepramos query
+			$query="INSERT INTO presion(presionID, presionDist, presionSist, presionDistManual, presionSistManual, pacienteID, fecha) VALUES (".$presion->presionID.",".$presion->presionDiastolica.",".$presion->presionSistolica.",".$presion->presionDiastolicaManual.",".$presion->presionSistolicaManual.",'".$this->userID."','".$presion->fechaPresion."')";
+			//hacemos query al servidor
+			if($result=$conexionMySQL->query($query)){
+				$resultado = new \stdClass();
+				$resultado->success="yes";
+				//despelgarlo
+				echo json_encode($resultado);
+			}
+			else{
+				//mandar mensaje de error
+				mandarMensajeError("Error insertando datos a la base de datos");
+			}
+		}
 	}
 ?>
