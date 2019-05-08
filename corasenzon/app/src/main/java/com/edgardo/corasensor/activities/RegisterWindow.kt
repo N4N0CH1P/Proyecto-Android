@@ -54,7 +54,7 @@ class RegisterWindow : AppCompatActivity() {
             }
         }
         //agregar listener para el spinner del sexo
-        spinnerRango.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        spinnerSexo.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) { TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
