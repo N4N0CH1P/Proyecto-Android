@@ -5,25 +5,28 @@ import com.edgardo.corasensor.networkUtility.NetworkConnection
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.edgardo.corasensor.Clases.GlobalUser
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.activities.HistorialActivity
 import com.edgardo.corasensor.activities.LoginActivity
 import com.edgardo.corasensor.activities.MisPacientesAct
 import com.edgardo.corasensor.activities.MyInfoAct
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URLEncoder
 
 class MenuActivity : AppCompatActivity() {
+    var globalData = GlobalUser()
     var myCurrentUser: Usuario? = null
     lateinit var textNombreUsuario:TextView
     var email: String="test@mail.com"
@@ -31,6 +34,11 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        if(myCurrentUser==null){
+            botonSesion.setText("INICIAR SESION")
+            botonMiInformacion.visibility= View.INVISIBLE
+            botonConsultarRegistros.visibility= View.INVISIBLE
+        }
         //Declaracion de variables
         //BOTONES
         var botonSesion: Button = findViewById(R.id.botonSesion)
@@ -38,6 +46,8 @@ class MenuActivity : AppCompatActivity() {
         var botoInConsultaHistorial: Button = findViewById(R.id.botonConsultarRegistros)
         var botonMiInformacion: Button = findViewById(R.id.botonMiInformacion)
         var botonMisPacientes: Button = findViewById(R.id.botonMisPacientes)
+        //Esconder el boton mis pacientes
+        botonMisPacientes.visibility = View.INVISIBLE
         //TEXT VIEWS
         textNombreUsuario = findViewById(R.id.textoNombreUsuario)
         //conseguir los datos extra
@@ -45,6 +55,7 @@ class MenuActivity : AppCompatActivity() {
             myCurrentUser=savedInstanceState?.getParcelable(USER)
             populateUserData()
         }
+
         //Obtener los datos de usuario de servicio web
         if(NetworkConnection.isNetworkConnected(this)) {
             if(myCurrentUser==null){
@@ -55,10 +66,32 @@ class MenuActivity : AppCompatActivity() {
         }
         //Listener para el boton de login
         botonSesion.setOnClickListener {
-            //Preparamos el intent
-            var intent: Intent = Intent(this, LoginActivity::class.java)
-            //ejecutramos el intent para un activity on result
-            startActivityForResult(intent,0)
+            //LOGIN
+            if (myCurrentUser == null)
+            {
+                //ver si tenemos internet
+                if(NetworkConnection.isNetworkConnected(this)) {
+                    //Preparamos el intent
+                    var intent: Intent = Intent(this, LoginActivity::class.java)
+                    //ejecutramos el intent para un activity on result
+                    startActivityForResult(intent, 0)
+                }
+                else{
+                    Toast.makeText(this, "No se tiene conexion a Internet", Toast.LENGTH_LONG).show()
+                }
+            }
+            //LOGOUT
+            else
+            {
+                botonMiInformacion.visibility= View.INVISIBLE
+                botonConsultarRegistros.visibility= View.INVISIBLE
+                botonMisPacientes.visibility=View.INVISIBLE
+                globalData.setUser(null)
+                botonSesion.setText("INICIAR SESION")
+                myCurrentUser = null
+                textoNombreUsuario.setText("No tienes sesion iniciada")
+            }
+
         }
         //listener para el boton de historial
         botoInConsultaHistorial.setOnClickListener{
@@ -170,6 +203,8 @@ class MenuActivity : AppCompatActivity() {
                 password=data.getStringExtra(LoginActivity.PASSWORD)
                 //llenar la informacion del usuario
                 getMyDataFromService()
+                WriteToFile(email, "email.txt")
+                WriteToFile(password, "password.txt")
             }
         }
     }
@@ -190,6 +225,17 @@ class MenuActivity : AppCompatActivity() {
                 jsonData.getString("rango"),
                 jsonData.getString("email"),
                 jsonData.getString("password"))
+        globalData.setUser(myCurrentUser!!)
+        //ver si es Doctor
+        if(myCurrentUser!!.rango=="Doctor"){
+            botonMisPacientes.visibility = View.VISIBLE
+        }
+        else{
+            botonMisPacientes.visibility = View.INVISIBLE
+        }
+        botonMiInformacion.visibility= View.VISIBLE
+        botonConsultarRegistros.visibility= View.VISIBLE
+        botonSesion.setText("LOGOUT")
         //llamar funcion para llenar la informacion dentro del texto
         populateUserData()
     }
@@ -202,10 +248,47 @@ class MenuActivity : AppCompatActivity() {
         super.onSaveInstanceState(savedInstanceState)
         if(myCurrentUser!=null){
             savedInstanceState?.putParcelable(USER,myCurrentUser)
+            WriteToFile(myCurrentUser?.userID.toString(), "user.txt")
         }
         else{
             savedInstanceState?.putParcelable(USER,null)
         }
+    }
+    public fun WriteToFile(text:String, fileName:String)
+    {
+        try
+        {
+            var fo = FileWriter(File(this.filesDir, fileName))
+            fo.use { it.write(text) }
+            fo.close()
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    public fun ReadFromFile(fileName:String)
+    {
+        var text:String = ""
+        try
+        {
+            var fin = FileReader(File(this.filesDir, fileName))
+            var c:Int?
+            do
+            {
+                c = fin.read()
+                text += c.toChar()
+            } while(c!=-1)
+        } catch (e:Exception)
+        {
+            print(e.message)
+        }
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        myCurrentUser = savedInstanceState?.getParcelable(USER)
+        populateUserData()
     }
     //Declaracion del companion object
     companion object{

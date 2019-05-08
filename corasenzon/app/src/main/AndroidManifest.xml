@@ -31,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.SaveToPatient"></activity>
         <activity android:name=".activities.InformacionPaciente" />
         <activity android:name=".activities.MyInfoAct" />
         <activity android:name=".activities.MisPacientesAct" />

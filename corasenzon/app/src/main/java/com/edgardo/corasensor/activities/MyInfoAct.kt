@@ -5,21 +5,40 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.edgardo.corasensor.R
 import com.squareup.picasso.Picasso
+import java.io.File
+import java.io.FileReader
+import java.io.InputStream
 
 class MyInfoAct : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_info)
+
+        var text:String = ""
+        try
+        {
+            var fin = FileReader(File(this.filesDir, "email.txt"))
+            var c:Int?
+            do
+            {
+                c = fin.read()
+                text += c.toChar()
+            } while(c!=-1)
+        } catch (e:Exception)
+        {
+            print(e.message)
+        }
         //Declaracion de variables
         var imagenCodigoQr:ImageView= findViewById(R.id.imagenCodigoQR)
         var textNombre: TextView = findViewById(R.id.textFecha)
         var textEmail: TextView = findViewById(R.id.textEmail1)
         var textSexo: TextView = findViewById(R.id.textSexo1)
         var textRango: TextView = findViewById(R.id.textRango)
-        var textFechaNacimiento: TextView = findViewById(R.id.textRango)
+        var textFechaNacimiento: TextView = findViewById(R.id.textFechaNacimiento1)
         //Ver si tenemos datos del intent
         var data = intent.extras
         if(data!=null){
@@ -30,7 +49,7 @@ class MyInfoAct : AppCompatActivity() {
             textNombre.text=myUser.nombre+" "+myUser.apellido
             textEmail.text=myUser.email
             textSexo.text=myUser.sexo.toString()
-            textRango.text=myUser.rango
+            textRango.text=myUser.rango.toString()
             textFechaNacimiento.text=myUser.fechaNacimiento
             //Usar picaso para generar el codigo QR para ponerlo en el image view
             //cargar imagen con picaso

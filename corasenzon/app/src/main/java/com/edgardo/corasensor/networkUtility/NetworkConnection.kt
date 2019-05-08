@@ -3,6 +3,7 @@ package com.edgardo.corasensor.networkUtility
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.support.v4.content.ContextCompat.getSystemService
 import android.util.Log
 import java.io.IOException
 import java.net.URL
@@ -35,6 +36,14 @@ class NetworkConnection {
             val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
 
             return networkInfo?.isConnectedOrConnecting ?: false
+        }
+
+        fun isNetworkAvailable(context:Context): Boolean {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
+            return if (connectivityManager is ConnectivityManager) {
+                val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+                networkInfo?.isConnected ?: false
+            } else false
         }
 
     }

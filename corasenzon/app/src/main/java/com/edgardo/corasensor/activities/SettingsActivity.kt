@@ -30,6 +30,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.*
+import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.HeartAssistantApplication
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.database.ScanDatabase
@@ -47,7 +48,6 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 class SettingsActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
-
     val _tag = "SettingAct"
     // List of bluetooth devices
     var btDevices = ArrayList<BluetoothDevice>()
@@ -64,7 +64,7 @@ class SettingsActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
     lateinit var instanceDatabase: ScanDatabase
 
     val formatter = SimpleDateFormat("HH:mm:ss.SSSXXX")
-
+    var paciente: Usuario?=null
 
     companion object {
         const val BLUETOOTH_REQUEST_PERMISSION = 1001
@@ -73,6 +73,10 @@ class SettingsActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        var data = intent.extras
+        if((data!=null)&&data.containsKey(MenuActivity.USER)){
+            paciente = data.getParcelable(MenuActivity.USER)
+        }
         instanceDatabase = ScanDatabase.getInstance(this)
 
 
@@ -96,7 +100,7 @@ class SettingsActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
             if (device != null) {
                 default_devices.text = "Device set ${device.name}"
             } else {
-                default_devices.text = "No divice set"
+                default_devices.text = "No device set"
             }
         }
 
