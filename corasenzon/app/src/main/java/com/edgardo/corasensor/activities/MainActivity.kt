@@ -35,6 +35,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.edgardo.corasensor.Clases.GlobalUser
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.HeartAssistantApplication
 import com.edgardo.corasensor.R
@@ -53,7 +54,7 @@ import java.io.FileReader
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     val _tag = "MainApp"
-
+    var paciente: Usuario? = null;
     lateinit var instanceDatabase: ScanDatabase
 
     lateinit var bt_connect: BluetoothConnection
@@ -75,9 +76,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //RECIBIR AL USUARIO SI ES QUE HAY
         var data = intent.extras
         if(data!=null){
-            //conseguimos el elemento Paciente
-            var paciente: Usuario = data.getParcelable(MenuActivity.USER)
-
             var userID:String = ""
             try
             {
@@ -210,7 +208,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
-
             }
         }
 

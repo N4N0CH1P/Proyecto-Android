@@ -189,7 +189,7 @@
                     android:layout_width="75dp"
                     android:layout_height="49dp"
                     android:layout_marginBottom="8dp"
-                    android:inputType="text"
+                    android:inputType="numberDecimal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/label_identifier"
@@ -209,7 +209,7 @@
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="150dp"
                     android:layout_height="70dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     android:backgroundTint="@color/colorAccent"
@@ -217,22 +217,39 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="0.131" />
+
+                <Button
+                    android:id="@+id/button_saveDoc"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="327dp"
+                    android:layout_height="73dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@android:color/holo_green_dark"
+                    android:text="Save to patient"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button_save"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <Button
                     android:id="@+id/button_save"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="150dp"
                     android:layout_height="70dp"
-                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
                     android:backgroundTint="@android:color/holo_green_dark"
                     android:text="@string/button_detail_save"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.131" />
             </android.support.constraint.ConstraintLayout>
             </LinearLayout>
 

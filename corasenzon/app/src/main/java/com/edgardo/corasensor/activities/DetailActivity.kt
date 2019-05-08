@@ -17,7 +17,6 @@
 
 package com.edgardo.corasensor.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -26,12 +25,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.edgardo.corasensor.Clases.GlobalUser
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.Scan.Scan
 import com.edgardo.corasensor.database.ScanDatabase
 import com.edgardo.corasensor.helpers.Converters
-import com.edgardo.corasensor.networkUtility.Executor
 import com.edgardo.corasensor.networkUtility.NetworkConnection
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.doAsync
@@ -45,14 +44,20 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     lateinit var extras: Bundle
     lateinit var instanceDatabase: ScanDatabase
     lateinit var scanRec: Scan
+    var globalData = GlobalUser()
+    var paciente:Usuario?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
         extras = intent.extras ?: return
-
+        if(globalData.isUserLog()){
+            paciente=globalData.getData()
+            //ver si es doctor
+            if(paciente!!.rango!="Doctor"){
+                button_saveDoc.visibility = View.INVISIBLE
+            }
+        }
         instanceDatabase = ScanDatabase.getInstance(this)
-
         scanRec = extras.getParcelable(MainActivity.SCAN_KEY)!!
         text_pressure_systolic.setText(scanRec.pressureSystolic.toString())
         text_pressure_diastolic.setText(scanRec.pressureDiastolic.toString())
@@ -65,109 +70,63 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         disableEditText(text_pressure_systolic)
         disableEditText(text_pressure_diastolic)
-
-
         button_dont_save.setOnClickListener { onClick(it) }
-
         button_save.setOnClickListener { onClick(it) }
+        //Agregar listener para guardar datos a paciente
+        button_saveDoc.setOnClickListener {onClick(it)}
     }
 
     private fun onClick(view: View) {
-
         when (view.id) {
             R.id.button_save -> {
                 if(camposLlenos())
                 {
-                    Executor.ioThread {
-                        scanRec.pressureSystolicManual = text_systolic_manual.text.toString().toDouble()
-                        scanRec.pressureDiastolicManual = text_diastolic_manual.text.toString().toDouble()
-                        scanRec.idManual = text_identifier.text.toString()
-
-                        instanceDatabase.scanDao().updateScan(scanRec)
-                        runOnUiThread {
-                            Toast.makeText(applicationContext, applicationContext.getString(R.string.save), Toast.LENGTH_LONG).show()
-                            finish()
+                    //ver si tenemos conexion a internet
+                    if(NetworkConnection.isNetworkAvailable(this)){
+                        //ver si tenemos un usuario
+                        if(paciente!=null){
+                            //Preparar los datos POST para mandar lllamar la funcion del registro
+                            var datosPost:String = ""
+                            //Llenar datos
+                            datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
+                                    URLEncoder.encode(paciente!!.email, "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
+                                    URLEncoder.encode(paciente!!.password, "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
+                                    URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
+                                    URLEncoder.encode(text_pressure_systolic.text.toString(), "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("presionDistMan", "UTF-8") + "=" +
+                                    URLEncoder.encode(text_diastolic_manual.text.toString(), "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
+                                    URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
+                                    URLEncoder.encode(paciente!!.userID, "UTF-8")+"&"
+                            datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
+                                    URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
+                            //llamar la funcion para registrar usuario
+                            registerPresion(datosPost)
+                        }
+                        else{
+                            Toast.makeText(applicationContext, "Tienes que tener una sesion iniciada para guardar la presion", Toast.LENGTH_LONG).show()
                         }
                     }
-
-
-
-                    //ver si tenemos conexion a Internet
-
-                        var email:String = ""
-                        try
-                        {
-                            var fin = FileReader(File(this.filesDir, "email.txt"))
-                            var c:Int?
-                            do
-                            {
-                                c = fin.read()
-                                email += c.toChar()
-                            } while(c!=-1)
-                        } catch (e:Exception)
-                        {
-                            print(e.message)
-                        }
-
-                        var password:String = ""
-                        try
-                        {
-                            var fin = FileReader(File(this.filesDir, "password.txt"))
-                            var c:Int?
-                            do
-                            {
-                                c = fin.read()
-                                password += c.toChar()
-                            } while(c!=-1)
-                        } catch (e:Exception)
-                        {
-                            print(e.message)
-                        }
-
-                    var userID:String = ""
-                    try
-                    {
-                        var fin = FileReader(File(this.filesDir, "user.txt"))
-                        var c:Int?
-                        do
-                        {
-                            c = fin.read()
-                            userID += c.toChar()
-                        } while(c!=-1)
-                    } catch (e:Exception)
-                    {
-                        print(e.message)
+                    else{
+                        Toast.makeText(applicationContext, "Se necesita conexion a internet", Toast.LENGTH_LONG).show()
                     }
-                        //Preparar los datos POST para mandar lllamar la funcion del registro
-                        var datosPost:String = ""
-                        //Llenar datos
-                        datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
-                                URLEncoder.encode(email, "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
-                                URLEncoder.encode(password, "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
-                                URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
-                                URLEncoder.encode(text_pressure_systolic.text.toString(), "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("presionDistMan", "UTF-8") + "=" +
-                                URLEncoder.encode(text_diastolic_manual.text.toString(), "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
-                                URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
-                                URLEncoder.encode(userID, "UTF-8")+"&"
-                        datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
-                                URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
-                        //llamar la funcion para registrar usuario
-                        registerPresion(datosPost)
-
                 }else{
                     Toast.makeText(applicationContext, "Hay campos sin llenar", Toast.LENGTH_LONG).show()
                 }
-
             }
             R.id.button_dont_save -> {
                 Toast.makeText(applicationContext, applicationContext.getString(R.string.dont_save), Toast.LENGTH_LONG).show()
                 finish()
+            }
+            R.id.button_saveDoc -> {
+                //Preparamos intent
+                var intentDoctor = Intent(this, SaveToPatient::class.java)
+                //TODO-ponemos la informacion extra
+
             }
         }
     }
@@ -223,9 +182,13 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                             //desplegar toast con mensaje de error del servidor
                             Toast.makeText(this@DetailActivity, objetoJSON.getString("error"), Toast.LENGTH_LONG).show()
                         }
-                        else{
-                            Toast.makeText(this@DetailActivity, objetoJSON.getString("success"), Toast.LENGTH_LONG).show()
+                        else if(objetoJSON.has("success")){
+                            Toast.makeText(this@DetailActivity, "Presion almacenada con exito", Toast.LENGTH_LONG).show()
                         }
+                        else{
+                            Toast.makeText(this@DetailActivity, "Error del servidor", Toast.LENGTH_LONG).show()
+                        }
+                        finish()
                     }
                 }
             }

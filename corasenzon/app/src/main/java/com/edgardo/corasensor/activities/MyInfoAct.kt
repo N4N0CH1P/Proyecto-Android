@@ -28,7 +28,6 @@ class MyInfoAct : AppCompatActivity() {
                 c = fin.read()
                 text += c.toChar()
             } while(c!=-1)
-            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
         } catch (e:Exception)
         {
             print(e.message)
