@@ -59,7 +59,7 @@ class RegisterWindow : AppCompatActivity() {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //Actualizar el valor del rango
-                rango = arregloRangos.get(position)
+                rango=arregloRangos.get(position)
             }
         }
         //agregar listener para el spinner del sexo

@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ScrollView01"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -80,4 +76,3 @@
         app:layout_constraintHorizontal_bias="0.486" android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/botonMisPacientes" app:layout_constraintVertical_bias="0.925"/>
 </android.support.constraint.ConstraintLayout>
-</ScrollView>
