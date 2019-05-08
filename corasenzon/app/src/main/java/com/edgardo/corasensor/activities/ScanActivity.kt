@@ -33,6 +33,8 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextPaint
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.HeartAssistantApplication
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.Scan.Scan
@@ -141,6 +143,22 @@ class ScanActivity : AppCompatActivity() {
                 finish()
             }
         }
+
+        //RECIBIR AL USUARIO SI ES QUE HAY
+        var data = intent.extras
+        if(data!=null){
+            //conseguimos el elemento Paciente
+            var paciente: Usuario = data.getParcelable(MenuActivity.USER)
+
+            if (paciente.nombre != "")
+            {
+                //Imprimimos la info del paciente
+                Toast.makeText(this, "Sesión iniciada como " + paciente.nombre + " " +
+                        paciente.apellido, Toast.LENGTH_LONG).show()
+            }
+
+        }
+
         button_cancel_scan.setOnClickListener { onClick(it) }
         button_finish.setOnClickListener { onClick(it) }
 

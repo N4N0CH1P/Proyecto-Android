@@ -15,14 +15,11 @@ import com.edgardo.corasensor.activities.HistorialActivity
 import com.edgardo.corasensor.activities.LoginActivity
 import com.edgardo.corasensor.activities.MisPacientesAct
 import com.edgardo.corasensor.activities.MyInfoAct
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URLEncoder
 
@@ -34,6 +31,7 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+
         //Declaracion de variables
         //BOTONES
         var botonSesion: Button = findViewById(R.id.botonSesion)
@@ -48,6 +46,7 @@ class MenuActivity : AppCompatActivity() {
             myCurrentUser=savedInstanceState?.getParcelable(USER)
             populateUserData()
         }
+
         //Obtener los datos de usuario de servicio web
         if(NetworkConnection.isNetworkConnected(this)) {
             if(myCurrentUser==null){
@@ -59,10 +58,23 @@ class MenuActivity : AppCompatActivity() {
         }
         //Listener para el boton de login
         botonSesion.setOnClickListener {
-            //Preparamos el intent
-            var intent: Intent = Intent(this, LoginActivity::class.java)
-            //ejecutramos el intent para un activity on result
-            startActivityForResult(intent,0)
+            //LOGIN
+            if (myCurrentUser == null)
+            {
+                botonSesion.setText("LOGOUT")
+                //Preparamos el intent
+                var intent: Intent = Intent(this, LoginActivity::class.java)
+                //ejecutramos el intent para un activity on result
+                startActivityForResult(intent,0)
+            }
+            //LOGOUT
+            else
+            {
+                botonSesion.setText("INICIAR SESION")
+                myCurrentUser = null
+                textoNombreUsuario.setText("No tienes sesion iniciada")
+            }
+
         }
         //listener para el boton de historial
         botoInConsultaHistorial.setOnClickListener{
@@ -115,7 +127,20 @@ class MenuActivity : AppCompatActivity() {
         //agregar listener a boton registrar nueva presion
         botonNuevaPresion.setOnClickListener {
             var intent:Intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            //agregar usuario al intent
+            //Checar si se ha iniciado sesion
+            if (myCurrentUser == null)
+            {
+                intent.putExtra(MenuActivity.USER, Usuario("", "", "",
+                        'M', "", "", "", ""))
+                startActivity(intent)
+            }
+            else
+            {
+                intent.putExtra(MenuActivity.USER,myCurrentUser)
+                startActivity(intent)
+            }
+
         }
     }
     //Funcion para obtener los datos del usuario
@@ -172,6 +197,8 @@ class MenuActivity : AppCompatActivity() {
                 //conseguir el usuario y meterlo dentro de nuestro objeto
                 email=data.getStringExtra(LoginActivity.EMAIL)
                 password=data.getStringExtra(LoginActivity.PASSWORD)
+                WriteToFile(email, "email.txt")
+                WriteToFile(password, "password.txt")
                 //llenar la informacion del usuario
                 getMyDataFromService()
 
@@ -204,12 +231,43 @@ class MenuActivity : AppCompatActivity() {
         super.onSaveInstanceState(savedInstanceState)
         if(myCurrentUser!=null){
             savedInstanceState?.putParcelable(USER,myCurrentUser)
+            WriteToFile(myCurrentUser?.userID.toString(), "user.txt")
         }
         else{
             savedInstanceState?.putParcelable(USER,null)
         }
     }
+    public fun WriteToFile(text:String, fileName:String)
+    {
+        try
+        {
+            var fo = FileWriter(File(this.filesDir, fileName))
+            fo.use { it.write(text) }
+            fo.close()
+        }
+        catch (e:Exception)
+        {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
 
+    public fun ReadFromFile(fileName:String)
+    {
+        var text:String = ""
+        try
+        {
+            var fin = FileReader(File(this.filesDir, fileName))
+            var c:Int?
+            do
+            {
+                c = fin.read()
+                text += c.toChar()
+            } while(c!=-1)
+        } catch (e:Exception)
+        {
+            print(e.message)
+        }
+    }
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         myCurrentUser = savedInstanceState?.getParcelable(USER)

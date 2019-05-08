@@ -34,7 +34,8 @@ class LoginActivity : AppCompatActivity() {
         //Logica para hacer loign cuando se de click al boton de login
         botonLogin.setOnClickListener {
             //Ver si tenemos conexion a internet
-            if(NetworkConnection.isNetworkConnected(this)){
+            if(NetworkConnection.isNetworkConnected(this) &&
+                    NetworkConnection.isNetworkAvailable(this)){
                 //llamar la funcion para hacer login al usuario
                 loginUsuario(inputEmail.text.toString(),inputPassword.text.toString());
             }

@@ -2,7 +2,7 @@
     <string name="app_name">Scanner</string>
     <string name="namePar">Nombre</string>
     <string name="apellidoPar">Apellido</string>
-    <string name="fechaPar">Fecha Nacimiento</string>
+    <string name="fechaPar">Fecha Nacimiento AAAAMMDD</string>
     <string name="passwordPar1">Contrasena</string>
     <string name="passwordPar2">Repetir Contrasena</string>
     <string name="emailPar">correo@dominio.com</string>

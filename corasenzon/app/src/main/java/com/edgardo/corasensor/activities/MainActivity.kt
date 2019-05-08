@@ -34,6 +34,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.HeartAssistantApplication
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.Scan.Scan
@@ -46,6 +48,8 @@ import com.edgardo.corasensor.networkUtility.Executor.Companion.ioThread
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_start_scan.*
+import java.io.File
+import java.io.FileReader
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     val _tag = "MainApp"
@@ -58,6 +62,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         const val SCAN_KEY: String = "SCAN_KEY"
         // BT code permission
         const val BLUETOOTH_REQUEST_PERMISSION = 1001
+
+        const val USER = "user"
     }
 
     val scanListFragment = scanListFragment()
@@ -66,6 +72,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //RECIBIR AL USUARIO SI ES QUE HAY
+        var data = intent.extras
+        if(data!=null){
+            //conseguimos el elemento Paciente
+            var paciente: Usuario = data.getParcelable(MenuActivity.USER)
+
+            var userID:String = ""
+            try
+            {
+                var fin = FileReader(File(this.filesDir, "user.txt"))
+                var c:Int?
+                do
+                {
+                    c = fin.read()
+                    userID += c.toChar()
+                } while(c!=-1)
+                Toast.makeText(this, userID, Toast.LENGTH_LONG)
+            } catch (e:Exception)
+            {
+                print(e.message)
+            }
+
+        }
 
         bt_connect = BluetoothConnection(this)
 

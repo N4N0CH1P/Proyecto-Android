@@ -96,7 +96,7 @@ class SettingsActivity : AppCompatActivity(), AdapterView.OnItemClickListener {
             if (device != null) {
                 default_devices.text = "Device set ${device.name}"
             } else {
-                default_devices.text = "No divice set"
+                default_devices.text = "No device set"
             }
         }
 
