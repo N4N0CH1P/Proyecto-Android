@@ -208,6 +208,12 @@ class MenuActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        getMyDataFromService()
+    }
+
     //Funcion para almacenar la informacion de usuario local
     private fun storeUserData(jsonData:JSONObject){
         myCurrentUser= Usuario(
