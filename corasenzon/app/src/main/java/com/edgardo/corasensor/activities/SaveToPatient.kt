@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.widget.ListView
 import android.widget.Toast
 import com.edgardo.corasensor.Clases.GlobalUser
+import com.edgardo.corasensor.Clases.Presion
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.networkUtility.NetworkConnection
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.activity_save_to_patient.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
@@ -26,24 +28,26 @@ class SaveToPatient : AppCompatActivity() {
     var listaPacientes:MutableList<Usuario> = mutableListOf()
     var adaptador = PacientesAdpater(this, listaPacientes)
     var globalData = GlobalUser()
+    //Declaracion de variables
+    lateinit var myDoctor:Usuario
+    lateinit var newPresion: Presion
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_save_to_patient)
         var data = intent.extras
-        var listViewPacientes: ListView = findViewById(R.id.listViewP)
-        listViewPacientes.adapter=adaptador
-
+        listViewP.adapter=adaptador
         //conseguir informacion de doctor
         if(globalData.isUserLog()&&data!=null){
             //Declaracion de variables TODO
-            var myDoctor:Usuario = globalData.getData()
-            var presionDist:
+            myDoctor= globalData.getData()
+            newPresion=data.getParcelable(DetailActivity.PRESION)
+            //var presionDist
             getPacientesDoctor(myDoctor)
         }
         //agregar listener a la lista
-        listViewPacientes.setOnItemClickListener { adapterView, view, position, id ->
-            //TODO- LOGICA PARA GUARDAR TOMA DE PRESION
-            savePresionToPatient()
+        listViewP.setOnItemClickListener { adapterView, view, position, id ->
+            //llamar funcion para guardar la presion
+            savePresionToPatient(listaPacientes[position])
         }
     }    //Declaracion de la funcion para obtener los pacientes del doctor
     private fun getPacientesDoctor(myDoctor:Usuario){
@@ -99,26 +103,26 @@ class SaveToPatient : AppCompatActivity() {
         }
         adaptador.notifyDataSetChanged()
     }
-    private fun savePresionToPatient(){
+    private fun savePresionToPatient(paciente:Usuario){
         // TODO -Preparar los datos POST para mandar lllamar la funcion del registro
         var datosPost:String = ""
         //Llenar datos
         datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
-                URLEncoder.encode(paciente!!.email, "UTF-8")+"&"
+                URLEncoder.encode(myDoctor.email, "UTF-8")+"&"
         datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
-                URLEncoder.encode(paciente!!.password, "UTF-8")+"&"
+                URLEncoder.encode(myDoctor.password, "UTF-8")+"&"
         datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
-                URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
+                URLEncoder.encode(newPresion.presionDist.toString(), "UTF-8")+"&"
         datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
-                URLEncoder.encode(text_pressure_systolic.text.toString(), "UTF-8")+"&"
+                URLEncoder.encode(newPresion.presionSist.toString(), "UTF-8")+"&"
         datosPost+= URLEncoder.encode("presionDistMan", "UTF-8") + "=" +
-                URLEncoder.encode(text_diastolic_manual.text.toString(), "UTF-8")+"&"
+                URLEncoder.encode(newPresion.presionDistManual.toString(), "UTF-8")+"&"
         datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
-                URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
+                URLEncoder.encode(newPresion.presionSistManual.toString(), "UTF-8")+"&"
         datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
-                URLEncoder.encode(paciente!!.userID, "UTF-8")+"&"
+                URLEncoder.encode(paciente.userID, "UTF-8")+"&"
         datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
-                URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
+                URLEncoder.encode(newPresion.presionID, "UTF-8")
         //llamar la funcion para registrar usuario
         registerPresion(datosPost)
     }

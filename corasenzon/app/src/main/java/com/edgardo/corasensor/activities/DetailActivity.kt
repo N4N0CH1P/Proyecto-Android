@@ -26,6 +26,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.edgardo.corasensor.Clases.GlobalUser
+import com.edgardo.corasensor.Clases.Presion
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.Scan.Scan
@@ -44,6 +45,7 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     lateinit var extras: Bundle
     lateinit var instanceDatabase: ScanDatabase
     lateinit var scanRec: Scan
+    lateinit var presionNueva: Presion
     var globalData = GlobalUser()
     var paciente:Usuario?=null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +66,6 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         text_systolic_manual.setText("")
         text_diastolic_manual.setText("")
         text_identifier.setText(scanRec.idManual)
-
         graph.setImageBitmap(Converters.toBitmap(scanRec.image))
         print(scanRec.image.toString())
 
@@ -123,10 +124,11 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 finish()
             }
             R.id.button_saveDoc -> {
+                presionNueva=Presion(text_identifier.text.toString(),text_pressure_diastolic.text.toString().toDouble(),text_pressure_systolic.text.toString().toDouble(),text_diastolic_manual.text.toString().toDouble(),text_systolic_manual.text.toString().toDouble(),"")
                 //Preparamos intent
                 var intentDoctor = Intent(this, SaveToPatient::class.java)
-                //TODO-ponemos la informacion extra
-
+                intentDoctor.putExtra(PRESION,presionNueva)
+                startActivity(intentDoctor)
             }
         }
     }
@@ -193,6 +195,10 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 }
             }
         }
+    }
+    //Companion objet para los intent extra
+    companion object{
+        val PRESION:String="presion"
     }
 
 }
