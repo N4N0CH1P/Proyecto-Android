@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Network
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.IntegerRes
 import android.view.View
 import android.widget.*
 import com.edgardo.corasensor.R
@@ -33,6 +34,10 @@ class RegisterWindow : AppCompatActivity() {
         var year = c.get(Calendar.YEAR)
         var month = c.get(Calendar.MONTH)
         var day = c.get(Calendar.DAY_OF_MONTH)
+
+        var dia:Int = 0
+        var mes:Int = 0
+        var anio:Int = 0
         //Declaracion de variables
         var rango:String = "Paciente"
         var sexo:Char = 'H'
@@ -63,7 +68,7 @@ class RegisterWindow : AppCompatActivity() {
             }
         }
         //agregar listener para el spinner del sexo
-        spinnerRango.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        spinnerSexo.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) { TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -74,7 +79,10 @@ class RegisterWindow : AppCompatActivity() {
         //listener para mostrar la fecha de nacimiento
         buttonFechaNacimiento.setOnClickListener {
             val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
-            }, year, month, day)
+                dia = mDay
+                mes = mMonth + 1
+                anio = mYear
+                tvFechaN.setText(dia.toString() + "/" + mes.toString() + "/" + anio.toString())}, year, month, day)
             dpd.show()
         }
         //listener al boton de registra
@@ -100,11 +108,9 @@ class RegisterWindow : AppCompatActivity() {
                                     URLEncoder.encode(arrayInputs[i].text.toString(), "UTF-8") + "&"
                         }
                         //agregar la fecha de nacimiento
-                        var anio = c.get(Calendar.YEAR)
-                        var mes = c.get(Calendar.MONTH)
-                        var dia = c.get(Calendar.DAY_OF_MONTH)
                         datosPost += URLEncoder.encode("fechaNacimiento", "UTF-8") + "=" +
-                                URLEncoder.encode(anio.toString() + "/" + mes.toString() + "/" + dia.toString(), "UTF-8") + "&"
+                                URLEncoder.encode(anio.toString() + "/" + mes.toString() + "/"
+                                        + dia.toString(), "UTF-8") + "&"
                         //agregar lo faltante
                         datosPost += URLEncoder.encode("password", "UTF-8") + "=" +
                                 URLEncoder.encode(passwd1.text.toString(), "UTF-8") + "&"

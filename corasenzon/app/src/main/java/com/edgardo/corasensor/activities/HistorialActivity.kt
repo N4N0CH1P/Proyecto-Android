@@ -5,6 +5,8 @@ import com.edgardo.corasensor.Clases.*
 import com.edgardo.corasensor.networkUtility.NetworkConnection
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.edgardo.corasensor.Clases.Presion
@@ -26,6 +28,7 @@ class HistorialActivity : AppCompatActivity() {
     //Declaracion de variables
     var listaPresiones:MutableList<Presion> = mutableListOf()
     var adaptador = PresionAdapter(this, listaPresiones)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historial)
@@ -44,9 +47,13 @@ class HistorialActivity : AppCompatActivity() {
         }
         //agregar accion para el boton de enviar datos por excel
         botonExcel.setOnClickListener {
-            //ver si nuestor usuario no es nullo
+
+            Toast.makeText(this,"Loading...",Toast.LENGTH_SHORT).show()
+            //Ver si el usuario no es nulo
             if(newUser!=null){
+                botonExcel.isEnabled = false
                 sendUserHistory(newUser)
+                botonExcel.isEnabled = true
             }
             else{
                 //Desplegar mensaje de error en TOAST!!
@@ -114,6 +121,7 @@ class HistorialActivity : AppCompatActivity() {
     //Declaracion de la funcion para mandar los datos por excel llamando al API
     private fun sendUserHistory(myUser:Usuario){
         //Declaracion de variables
+        buttonExcel.isEnabled = false
         var parametrosPOST = URLEncoder.encode("userID", "UTF-8") + "=" + URLEncoder.encode(myUser.userID, "UTF-8")
         parametrosPOST += "&" + URLEncoder.encode("requestedUserID", "UTF-8") + "=" + URLEncoder.encode(myUser.userID, "UTF-8")
         parametrosPOST += "&" + URLEncoder.encode("userPassword", "UTF-8") + "=" + URLEncoder.encode(myUser.password, "UTF-8")
@@ -155,4 +163,5 @@ class HistorialActivity : AppCompatActivity() {
             }
         }
     }
+
 }

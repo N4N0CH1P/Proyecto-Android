@@ -5,16 +5,18 @@ import com.edgardo.corasensor.networkUtility.NetworkConnection
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.edgardo.corasensor.Clases.GlobalUser
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import com.edgardo.corasensor.activities.HistorialActivity
 import com.edgardo.corasensor.activities.LoginActivity
 import com.edgardo.corasensor.activities.MisPacientesAct
 import com.edgardo.corasensor.activities.MyInfoAct
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_menu.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -24,6 +26,7 @@ import java.net.HttpURLConnection
 import java.net.URLEncoder
 
 class MenuActivity : AppCompatActivity() {
+    var globalData = GlobalUser()
     var myCurrentUser: Usuario? = null
     lateinit var textNombreUsuario:TextView
     var email: String="test@mail.com"
@@ -31,7 +34,11 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
-
+        if(myCurrentUser==null){
+            botonSesion.setText("INICIAR SESION")
+            botonMiInformacion.visibility= View.INVISIBLE
+            botonConsultarRegistros.visibility= View.INVISIBLE
+        }
         //Declaracion de variables
         //BOTONES
         var botonSesion: Button = findViewById(R.id.botonSesion)
@@ -39,6 +46,8 @@ class MenuActivity : AppCompatActivity() {
         var botoInConsultaHistorial: Button = findViewById(R.id.botonConsultarRegistros)
         var botonMiInformacion: Button = findViewById(R.id.botonMiInformacion)
         var botonMisPacientes: Button = findViewById(R.id.botonMisPacientes)
+        //Esconder el boton mis pacientes
+        botonMisPacientes.visibility = View.INVISIBLE
         //TEXT VIEWS
         textNombreUsuario = findViewById(R.id.textoNombreUsuario)
         //conseguir los datos extra
@@ -60,15 +69,24 @@ class MenuActivity : AppCompatActivity() {
             //LOGIN
             if (myCurrentUser == null)
             {
-                botonSesion.setText("LOGOUT")
-                //Preparamos el intent
-                var intent: Intent = Intent(this, LoginActivity::class.java)
-                //ejecutramos el intent para un activity on result
-                startActivityForResult(intent,0)
+                //ver si tenemos internet
+                if(NetworkConnection.isNetworkConnected(this)) {
+                    //Preparamos el intent
+                    var intent: Intent = Intent(this, LoginActivity::class.java)
+                    //ejecutramos el intent para un activity on result
+                    startActivityForResult(intent, 0)
+                }
+                else{
+                    Toast.makeText(this, "No se tiene conexion a Internet", Toast.LENGTH_LONG).show()
+                }
             }
             //LOGOUT
             else
             {
+                botonMiInformacion.visibility= View.INVISIBLE
+                botonConsultarRegistros.visibility= View.INVISIBLE
+                botonMisPacientes.visibility=View.INVISIBLE
+                globalData.setUser(null)
                 botonSesion.setText("INICIAR SESION")
                 myCurrentUser = null
                 textoNombreUsuario.setText("No tienes sesion iniciada")
@@ -126,20 +144,7 @@ class MenuActivity : AppCompatActivity() {
         //agregar listener a boton registrar nueva presion
         botonNuevaPresion.setOnClickListener {
             var intent:Intent = Intent(this, MainActivity::class.java)
-            //agregar usuario al intent
-            //Checar si se ha iniciado sesion
-            if (myCurrentUser == null)
-            {
-                intent.putExtra(MenuActivity.USER, Usuario("", "", "",
-                        'M', "", "", "", ""))
-                startActivity(intent)
-            }
-            else
-            {
-                intent.putExtra(MenuActivity.USER,myCurrentUser)
-                startActivity(intent)
-            }
-
+            startActivity(intent)
         }
     }
     //Funcion para obtener los datos del usuario
@@ -196,10 +201,10 @@ class MenuActivity : AppCompatActivity() {
                 //conseguir el usuario y meterlo dentro de nuestro objeto
                 email=data.getStringExtra(LoginActivity.EMAIL)
                 password=data.getStringExtra(LoginActivity.PASSWORD)
-                WriteToFile(email, "email.txt")
-                WriteToFile(password, "password.txt")
                 //llenar la informacion del usuario
                 getMyDataFromService()
+                WriteToFile(email, "email.txt")
+                WriteToFile(password, "password.txt")
             }
         }
     }
@@ -214,6 +219,17 @@ class MenuActivity : AppCompatActivity() {
                 jsonData.getString("rango"),
                 jsonData.getString("email"),
                 jsonData.getString("password"))
+        globalData.setUser(myCurrentUser!!)
+        //ver si es Doctor
+        if(myCurrentUser!!.rango=="Doctor"){
+            botonMisPacientes.visibility = View.VISIBLE
+        }
+        else{
+            botonMisPacientes.visibility = View.INVISIBLE
+        }
+        botonMiInformacion.visibility= View.VISIBLE
+        botonConsultarRegistros.visibility= View.VISIBLE
+        botonSesion.setText("LOGOUT")
         //llamar funcion para llenar la informacion dentro del texto
         populateUserData()
     }
@@ -232,7 +248,6 @@ class MenuActivity : AppCompatActivity() {
             savedInstanceState?.putParcelable(USER,null)
         }
     }
-
     public fun WriteToFile(text:String, fileName:String)
     {
         try
@@ -264,7 +279,11 @@ class MenuActivity : AppCompatActivity() {
             print(e.message)
         }
     }
-
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        myCurrentUser = savedInstanceState?.getParcelable(USER)
+        populateUserData()
+    }
     //Declaracion del companion object
     companion object{
         val USER:String="user"
