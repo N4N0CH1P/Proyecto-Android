@@ -46,7 +46,7 @@
 			}
 		}
 		else{
-			mandarMensajeError("Error interno del servidor, problemas con base de datos");
+			mandarMensajeError("Usuario o Password Incorrecto");
 			die();
 		}
 	}
