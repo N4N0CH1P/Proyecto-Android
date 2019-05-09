@@ -5,9 +5,6 @@ dbUsername="victor"
 dbPassword="password"
 databaseName="msva"
 
-#Establecer la conexion con la base de datos
-db = MySQLdb.connect(direcionIP,dbUsername,dbPassword,databaseName)
-
 #funcion para regresar el primer valor
 def getFirstElement(list,default=None):
     if list:
@@ -22,6 +19,8 @@ def sendErrorMssg(mssg):
 
 #Funcion para obtener informacion de la base de datos
 def fetchDataFromDatabase(query):
+    #Establecer la conexion con la base de datos
+    db = MySQLdb.connect(direcionIP,dbUsername,dbPassword,databaseName)
     #Iniciamos el cursor dentro de nuestra base de datos
     cursor=db.cursor()
     #TRY CATCH BLOCK
