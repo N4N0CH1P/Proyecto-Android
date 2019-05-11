@@ -73,6 +73,17 @@
         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/spinnerSexo"/>
+    <TextView
+        android:layout_width="379dp"
+        android:layout_height="43dp"
+        android:text="00/00/0000"
+        android:textSize="25sp"
+        android:gravity="center_horizontal"
+        android:id="@+id/tvFechaN" app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/spinnerRango"/>
     <Button
         android:layout_width="379dp"
         android:layout_height="43dp"
@@ -81,7 +92,7 @@
         android:layout_marginStart="16dp"
         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
         app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/spinnerRango"/>
+        android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/tvFechaN"/>
     <Button
         android:text="Registrar Cuenta"
         android:layout_width="355dp"

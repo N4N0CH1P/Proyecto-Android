@@ -23,14 +23,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.SaveToPatient"></activity>
-        <activity android:name=".activities.InformacionPaciente" />
-        <activity android:name=".activities.MyInfoAct" />
-        <activity android:name=".activities.MisPacientesAct" />
-        <activity android:name=".activities.RegisterWindow" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.HistorialActivity" />
+        <activity android:name=".activities.SaveToPatient">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.InformacionPaciente">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.MyInfoAct">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.MisPacientesAct">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.RegisterWindow">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.LoginActivity">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.HistorialActivity">android:screenOrientation="portrait"</activity>
         <activity android:name=".activities.MenuActivity">
+            android:screenOrientation="portrait"
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
