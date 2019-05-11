@@ -95,50 +95,68 @@ class MenuActivity : AppCompatActivity() {
         }
         //listener para el boton de historial
         botoInConsultaHistorial.setOnClickListener{
-            //Ver si tenemos datos de User
-            if(myCurrentUser!=null){
-                //Declaracion de variables
-                var intent:Intent=Intent(this, HistorialActivity::class.java)
-                //agregar usuario al intent
-                intent.putExtra(MenuActivity.USER,myCurrentUser)
-                //INICIAR!
-                startActivity(intent)
+            //Ver si tenemos internet
+            if(NetworkConnection.isNetworkAvailable(this)){
+                //Ver si tenemos datos de User
+                if(myCurrentUser!=null){
+                    //Declaracion de variables
+                    var intent:Intent=Intent(this, HistorialActivity::class.java)
+                    //agregar usuario al intent
+                    intent.putExtra(MenuActivity.USER,myCurrentUser)
+                    //INICIAR!
+                    startActivity(intent)
+                }
+                else{
+                    //mandar mensaje de error
+                    Toast.makeText(this, "No se tiene una sesion iniciada", Toast.LENGTH_LONG).show()
+                }
+            }else{
+                //Despelgar toast de no tenemos internet
+                Toast.makeText(this, "No se tiene conexion a internet", Toast.LENGTH_LONG).show()
             }
-            else{
-                //mandar mensaje de error
-                Toast.makeText(this, "No se tiene una sesion iniciada", Toast.LENGTH_LONG).show()
-            }
+
         }
         //Listener para el boton mi informacion
         botonMiInformacion.setOnClickListener {
-            //Ver si tenemos datos de User
-            if(myCurrentUser!=null){
-                //Declaracion de variables
-                var intent:Intent=Intent(this, MyInfoAct::class.java)
-                //agregar usuario al intent
-                intent.putExtra(MenuActivity.USER,myCurrentUser)
-                //INICIAR!
-                startActivity(intent)
-            }
-            else{
-                //mandar mensaje de error
-                Toast.makeText(this, "No se tiene una sesion iniciada", Toast.LENGTH_LONG).show()
+            if(NetworkConnection.isNetworkAvailable(this)){
+                //Ver si tenemos datos de User
+                if(myCurrentUser!=null){
+                    //Declaracion de variables
+                    var intent:Intent=Intent(this, MyInfoAct::class.java)
+                    //agregar usuario al intent
+                    intent.putExtra(MenuActivity.USER,myCurrentUser)
+                    //INICIAR!
+                    startActivity(intent)
+                }
+                else{
+                    //mandar mensaje de error
+                    Toast.makeText(this, "No se tiene una sesion iniciada", Toast.LENGTH_LONG).show()
+                }
+            }else{
+                //Despelgar toast de no tenemos internet
+                Toast.makeText(this, "No se tiene conexion a internet", Toast.LENGTH_LONG).show()
             }
         }
         //agregar listener a boton mis pacientes
         botonMisPacientes.setOnClickListener {
-            //Ver si tenemos datos de User
-            if(myCurrentUser!=null){
-                //Declaracion de variables
-                var intent:Intent=Intent(this, MisPacientesAct::class.java)
-                //agregar usuario al intent
-                intent.putExtra(MenuActivity.USER,myCurrentUser)
-                //INICIAR!
-                startActivity(intent)
-            }
-            else{
-                //mandar mensaje de error
-                Toast.makeText(this, "No se tiene una sesion iniciada", Toast.LENGTH_LONG).show()
+            //ver si tenemos conexion a internet
+            if(NetworkConnection.isNetworkAvailable(this)){
+                //Ver si tenemos datos de User
+                if(myCurrentUser!=null){
+                    //Declaracion de variables
+                    var intent:Intent=Intent(this, MisPacientesAct::class.java)
+                    //agregar usuario al intent
+                    intent.putExtra(MenuActivity.USER,myCurrentUser)
+                    //INICIAR!
+                    startActivity(intent)
+                }
+                else{
+                    //mandar mensaje de error
+                    Toast.makeText(this, "No se tiene una sesion iniciada", Toast.LENGTH_LONG).show()
+                }
+            }else{
+                //Despelgar toast de no tenemos internet
+                Toast.makeText(this, "No se tiene conexion a internet", Toast.LENGTH_LONG).show()
             }
         }
         //agregar listener a boton registrar nueva presion

@@ -124,11 +124,23 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 finish()
             }
             R.id.button_saveDoc -> {
-                presionNueva=Presion(text_identifier.text.toString(),text_pressure_diastolic.text.toString().toDouble(),text_pressure_systolic.text.toString().toDouble(),text_diastolic_manual.text.toString().toDouble(),text_systolic_manual.text.toString().toDouble(),"")
-                //Preparamos intent
-                var intentDoctor = Intent(this, SaveToPatient::class.java)
-                intentDoctor.putExtra(PRESION,presionNueva)
-                startActivity(intentDoctor)
+                if(camposLlenos()){
+                    //ver si tenemos conexion a internet
+                    if(NetworkConnection.isNetworkAvailable(this)){
+                        presionNueva=Presion(text_identifier.text.toString(),text_pressure_diastolic.text.toString().toDouble(),text_pressure_systolic.text.toString().toDouble(),text_diastolic_manual.text.toString().toDouble(),text_systolic_manual.text.toString().toDouble(),"")
+                        //Preparamos intent
+                        var intentDoctor = Intent(this, SaveToPatient::class.java)
+                        intentDoctor.putExtra(PRESION,presionNueva)
+                        startActivity(intentDoctor)
+                    }else{
+                        Toast.makeText(applicationContext, "No se tiene conexion a internet", Toast.LENGTH_LONG).show()
+                    }
+
+                }else{
+                    Toast.makeText(applicationContext, "No se tienen los campos llenos", Toast.LENGTH_LONG).show()
+                }
+
+
             }
         }
     }
