@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -85,6 +89,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/spinnerRango"/>
     <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@drawable/button_background"
         android:layout_width="379dp"
         android:layout_height="43dp"
         android:text="ELEGIR FECHA DE NACIMIENTO"
@@ -94,6 +100,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/tvFechaN"/>
     <Button
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@drawable/button_background"
         android:text="Registrar Cuenta"
         android:layout_width="355dp"
         android:layout_height="wrap_content"
@@ -103,4 +111,4 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonFechaNacimiento" app:layout_constraintHorizontal_bias="0.375"
         android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.0"/>
-</android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout></ScrollView>

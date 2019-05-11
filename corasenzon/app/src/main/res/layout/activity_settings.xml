@@ -9,8 +9,9 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/button_discover"
         style="@style/Widget.AppCompat.Button.Colored"
+        android:background="@drawable/button_background"
+        android:id="@+id/button_discover"
         android:layout_width="331dp"
         android:layout_height="56dp"
         android:layout_marginStart="8dp"

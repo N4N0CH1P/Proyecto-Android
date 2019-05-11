@@ -40,6 +40,8 @@
             app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:background="@drawable/button_background"
             android:id="@+id/loginButton"
             android:layout_width="365dp"
             android:layout_height="wrap_content"
@@ -50,6 +52,8 @@
             app:layout_constraintTop_toBottomOf="@+id/editPassword" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:background="@drawable/button_background"
             android:id="@+id/registerButton"
             android:layout_width="365dp"
             android:layout_height="wrap_content"
