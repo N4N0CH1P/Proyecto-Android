@@ -23,13 +23,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.SaveToPatient">android:screenOrientation="portrait"</activity>
-        <activity android:name=".activities.InformacionPaciente">android:screenOrientation="portrait"</activity>
-        <activity android:name=".activities.MyInfoAct">android:screenOrientation="portrait"</activity>
-        <activity android:name=".activities.MisPacientesAct">android:screenOrientation="portrait"</activity>
-        <activity android:name=".activities.RegisterWindow">android:screenOrientation="portrait"</activity>
-        <activity android:name=".activities.LoginActivity">android:screenOrientation="portrait"</activity>
-        <activity android:name=".activities.HistorialActivity">android:screenOrientation="portrait"</activity>
+        <activity android:name=".activities.SaveToPatient"></activity>
+        <activity android:name=".activities.InformacionPaciente"></activity>
+        <activity android:name=".activities.MyInfoAct"></activity>
+        <activity android:name=".activities.MisPacientesAct"></activity>
+        <activity android:name=".activities.RegisterWindow"></activity>
+        <activity android:name=".activities.LoginActivity"></activity>
+        <activity android:name=".activities.HistorialActivity"></activity>
         <activity android:name=".activities.MenuActivity">
             android:screenOrientation="portrait"
 

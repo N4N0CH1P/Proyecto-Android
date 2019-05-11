@@ -58,7 +58,7 @@ class ScanAdapter(var scans: List<Scan>,
             scan = scans[index]
 
             itemView.text_date.text = "Date: " + scan.scanDate.toString()
-            itemView.text_pressure.text = "Avg: " + "${scan.pressureSystolic} / ${scan.pressureDiastolic} "
+            itemView.text_pressure.text = "Pressure: " + "${scan.pressureSystolic} / ${scan.pressureDiastolic} "
             if(scan.idManual != ""){
                 itemView.text_id.text = "Id: " + scan.idManual.toString()
             }

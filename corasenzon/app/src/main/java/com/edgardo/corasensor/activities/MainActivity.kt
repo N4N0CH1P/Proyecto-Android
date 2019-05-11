@@ -66,40 +66,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         const val USER = "user"
     }
-
+    //Declarar fragmento de listas de escaneo
     val scanListFragment = scanListFragment()
     val startScan = startScanFragment.newInstance("Uno", "DOS")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //RECIBIR AL USUARIO SI ES QUE HAY
-        var data = intent.extras
-        if(data!=null){
-            var userID:String = ""
-            try
-            {
-                var fin = FileReader(File(this.filesDir, "user.txt"))
-                var c:Int?
-                do
-                {
-                    c = fin.read()
-                    userID += c.toChar()
-                } while(c!=-1)
-                Toast.makeText(this, userID, Toast.LENGTH_LONG)
-            } catch (e:Exception)
-            {
-                print(e.message)
-            }
-
-        }
-
+        //Declarar el contexto de la conexión bluetooth
         bt_connect = BluetoothConnection(this)
 
-
+        //Verificar que se tengan los permisos en el manifiesto
         checkBTPermissions()
+        //Validar que Bluetooth esté prendido
         bt_connect.validateBTOn()
-
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)

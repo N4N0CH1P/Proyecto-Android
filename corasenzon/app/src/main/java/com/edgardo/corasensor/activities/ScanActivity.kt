@@ -56,7 +56,9 @@ import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class ScanActivity : AppCompatActivity() {
+    //Declarar base de datos Room
     lateinit var instanceDatabase: ScanDatabase
+    //Declarar la variable para almacenar presión
     var pressureVal: Int = 0
     val _tag = "ActivityScan"
     // List of bluetooth devices
@@ -75,6 +77,7 @@ class ScanActivity : AppCompatActivity() {
     lateinit var series: LineGraphSeries<DataPoint>
     lateinit var viewport: Viewport
 
+    //Declaración de variables para medidor de presión
     var time = 0
     var end_scan = false
     var lastPress = 0.0
@@ -102,6 +105,7 @@ class ScanActivity : AppCompatActivity() {
 
         instanceDatabase = ScanDatabase.getInstance(this)
 
+        //Dibujar el medidor de presión
         val layout1 = findViewById<android.support.constraint.ConstraintLayout>(R.id.manometro)
         canvass = Canvass(this, 230f, false)
         white = Canvass(this, 180f, true)
@@ -118,7 +122,7 @@ class ScanActivity : AppCompatActivity() {
         layout1.addView(canvass)
         layout1.addView(white)
 
-
+        //Mostrar la gráfica de presión sobre datos recibidos
         val graph = findViewById<View>(R.id.graph) as GraphView
         series = LineGraphSeries()
         graph.addSeries(series)
@@ -130,7 +134,7 @@ class ScanActivity : AppCompatActivity() {
         viewport.isScrollable = true
         viewport.isScalable = true
 
-
+        //Validar que el bluetooth esté activado y si no regresar al inicio
         validateBTOn()
         val application = application
         if (application is HeartAssistantApplication) {
@@ -178,6 +182,7 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun finish_scan() {
+        //Desconectar del dispositivo Bluetooth
         btConnection.disconnect()
         var finishTime = (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - runtime).toDouble()
 
