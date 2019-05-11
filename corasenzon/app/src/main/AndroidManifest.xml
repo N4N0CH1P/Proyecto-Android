@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!--android:hardwareAccelerated ="true"-->
+
 
     <uses-feature android:name="android.hardware.bluetooth" />
 
@@ -32,12 +34,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SaveToPatient"></activity>
-        <activity android:name=".activities.InformacionPaciente" />
-        <activity android:name=".activities.MyInfoAct" />
-        <activity android:name=".activities.MisPacientesAct" />
-        <activity android:name=".activities.RegisterWindow" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.HistorialActivity" />
+        <activity android:name=".activities.InformacionPaciente"></activity>
+        <activity android:name=".activities.MyInfoAct"></activity>
+        <activity android:name=".activities.MisPacientesAct"></activity>
+        <activity android:name=".activities.RegisterWindow"></activity>
+        <activity android:name=".activities.LoginActivity"></activity>
+        <activity android:name=".activities.HistorialActivity"></activity>
         <activity android:name=".activities.MenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

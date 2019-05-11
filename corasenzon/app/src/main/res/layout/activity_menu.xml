@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ScrollView01"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MenuActivity">
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:text="Mis pacientes"
         android:layout_width="367dp"
         android:layout_height="83dp"
@@ -45,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/imageView"
         android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintTop_toBottomOf="@+id/textoBievenido"/>
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:text="Registrar nueva presion"
         android:layout_width="367dp"
         android:layout_height="83dp"
@@ -54,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
         app:layout_constraintHorizontal_bias="0.4" android:layout_marginTop="88dp"
         app:layout_constraintTop_toBottomOf="@+id/textoNombreUsuario"/>
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:text="Mi Informacion"
         android:layout_width="179dp"
         android:layout_height="84dp"
@@ -63,14 +59,14 @@
         app:layout_constraintTop_toBottomOf="@+id/botonNuevaPresion" app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp" app:layout_constraintStart_toEndOf="@+id/botonConsultarRegistros"
         android:layout_marginStart="8dp"/>
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:text="Historial"
         android:layout_width="179dp"
         android:layout_height="84dp"
         android:id="@+id/botonConsultarRegistros" app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="24dp" android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/botonNuevaPresion"/>
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:text="Iniciar Sesion"
         android:layout_width="358dp"
         android:layout_height="47dp"
@@ -80,4 +76,3 @@
         app:layout_constraintHorizontal_bias="0.486" android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/botonMisPacientes" app:layout_constraintVertical_bias="0.925"/>
 </android.support.constraint.ConstraintLayout>
-</ScrollView>

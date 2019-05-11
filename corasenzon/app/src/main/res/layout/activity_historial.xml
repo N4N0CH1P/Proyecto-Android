@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
         app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
         app:layout_constraintHorizontal_bias="0.0"/>
-    <Button
+    <Button style="@style/Widget.AppCompat.Button.Colored"
         android:text="Exportar a Excel"
         android:layout_width="388dp"
         android:layout_height="65dp" app:layout_constraintStart_toStartOf="parent"
