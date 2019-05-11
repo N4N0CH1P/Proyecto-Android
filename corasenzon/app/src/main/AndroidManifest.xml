@@ -31,6 +31,11 @@
         <activity android:name=".activities.LoginActivity"></activity>
         <activity android:name=".activities.HistorialActivity"></activity>
         <activity android:name=".activities.MenuActivity">
+<<<<<<< HEAD
+=======
+            android:screenOrientation="portrait"
+
+>>>>>>> b5c5d28a1da29715e0e70e6f70520f17218f9abb
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
