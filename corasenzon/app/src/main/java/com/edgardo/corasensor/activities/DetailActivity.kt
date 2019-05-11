@@ -43,7 +43,9 @@ import java.net.URLEncoder
 
 class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     lateinit var extras: Bundle
+    //Declarar Room Database
     lateinit var instanceDatabase: ScanDatabase
+    //Iniciar variables para escaneo
     lateinit var scanRec: Scan
     lateinit var presionNueva: Presion
     var globalData = GlobalUser()
@@ -52,26 +54,35 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         extras = intent.extras ?: return
+        //Volver invisible el botón de guardar a paciente
+        button_saveDoc.visibility = View.INVISIBLE
         if(globalData.isUserLog()){
             paciente=globalData.getData()
             //ver si es doctor
-            if(paciente!!.rango!="Doctor"){
-                button_saveDoc.visibility = View.INVISIBLE
+            if(paciente!!.rango=="Doctor"){
+                button_saveDoc.visibility = View.VISIBLE
             }
         }
+        //Instanciar Room Database
         instanceDatabase = ScanDatabase.getInstance(this)
+        //Recibir llave de escaneo
         scanRec = extras.getParcelable(MainActivity.SCAN_KEY)!!
+        //Almacenar los datos obtenidos del dispositivo y dejar los datos manuales en blanco
         text_pressure_systolic.setText(scanRec.pressureSystolic.toString())
         text_pressure_diastolic.setText(scanRec.pressureDiastolic.toString())
-        text_systolic_manual.setText("")
-        text_diastolic_manual.setText("")
-        text_identifier.setText(scanRec.idManual)
+        text_systolic_manual.setText(scanRec.pressureSystolicManual.toString())
+        text_diastolic_manual.setText(scanRec.pressureDiastolicManual.toString())
+        //Almacenar el identificador de la presión recibido por el usuario
+        text_identifier.setText(scanRec.idManual.toString())
+        //Convertir e imprimir la imagen obtenida de los datos
         graph.setImageBitmap(Converters.toBitmap(scanRec.image))
         print(scanRec.image.toString())
-
+        //Desabilitar los datos extraidos del dispositivo para que no puedan ser manipulados
         disableEditText(text_pressure_systolic)
         disableEditText(text_pressure_diastolic)
+        //Agregar listener para no guardar los datos
         button_dont_save.setOnClickListener { onClick(it) }
+        //Agregar el listener para guardar los datos
         button_save.setOnClickListener { onClick(it) }
         //Agregar listener para guardar datos a paciente
         button_saveDoc.setOnClickListener {onClick(it)}
@@ -82,39 +93,46 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.button_save -> {
                 if(camposLlenos())
                 {
-                    //ver si tenemos conexion a internet
-                    if(NetworkConnection.isNetworkAvailable(this)){
-                        //ver si tenemos un usuario
-                        if(paciente!=null){
-                            //Preparar los datos POST para mandar lllamar la funcion del registro
-                            var datosPost:String = ""
-                            //Llenar datos
-                            datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
-                                    URLEncoder.encode(paciente!!.email, "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
-                                    URLEncoder.encode(paciente!!.password, "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
-                                    URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
-                                    URLEncoder.encode(text_pressure_systolic.text.toString(), "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("presionDistMan", "UTF-8") + "=" +
-                                    URLEncoder.encode(text_diastolic_manual.text.toString(), "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
-                                    URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
-                                    URLEncoder.encode(paciente!!.userID, "UTF-8")+"&"
-                            datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
-                                    URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
-                            //llamar la funcion para registrar usuario
-                            registerPresion(datosPost)
+                        //ver si tenemos conexion a internet
+                        if(NetworkConnection.isNetworkAvailable(this))
+                        {
+                            //ver si tenemos un usuario
+                            if(paciente!=null)
+                            {
+                                //Preparar los datos POST para mandar lllamar la funcion del registro
+                                var datosPost:String = ""
+                                //Llenar datos
+                                datosPost+= URLEncoder.encode("email", "UTF-8") + "=" +
+                                        URLEncoder.encode(paciente!!.email, "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("password", "UTF-8") + "=" +
+                                        URLEncoder.encode(paciente!!.password, "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("presionDist", "UTF-8") + "=" +
+                                        URLEncoder.encode(text_pressure_diastolic.text.toString(), "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("presionAsist", "UTF-8") + "=" +
+                                        URLEncoder.encode(text_pressure_systolic.text.toString(), "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("presionDistMan", "UTF-8") + "=" +
+                                        URLEncoder.encode(text_diastolic_manual.text.toString(), "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("presionAsistMan", "UTF-8") + "=" +
+                                        URLEncoder.encode(text_systolic_manual.text.toString(), "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("userID", "UTF-8") + "=" +
+                                        URLEncoder.encode(paciente!!.userID, "UTF-8")+"&"
+                                datosPost+= URLEncoder.encode("presionID", "UTF-8") + "=" +
+                                        URLEncoder.encode(text_identifier.text.toString(), "UTF-8")
+                                //llamar la funcion para registrar usuario
+                                registerPresion(datosPost)
+                            }
+                            else
+                            {
+                                Toast.makeText(applicationContext, "Presión guardada en dispositivo exitosamente", Toast.LENGTH_LONG).show()
+                                finish()
+                            }
                         }
-                        else{
-                            Toast.makeText(applicationContext, "Tienes que tener una sesion iniciada para guardar la presion", Toast.LENGTH_LONG).show()
+                        else
+                        {
+                            Toast.makeText(applicationContext, "Se necesita conexion a internet", Toast.LENGTH_LONG).show()
                         }
-                    }
-                    else{
-                        Toast.makeText(applicationContext, "Se necesita conexion a internet", Toast.LENGTH_LONG).show()
-                    }
+
+
                 }else{
                     Toast.makeText(applicationContext, "Hay campos sin llenar", Toast.LENGTH_LONG).show()
                 }
@@ -124,11 +142,23 @@ class DetailActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 finish()
             }
             R.id.button_saveDoc -> {
-                presionNueva=Presion(text_identifier.text.toString(),text_pressure_diastolic.text.toString().toDouble(),text_pressure_systolic.text.toString().toDouble(),text_diastolic_manual.text.toString().toDouble(),text_systolic_manual.text.toString().toDouble(),"")
-                //Preparamos intent
-                var intentDoctor = Intent(this, SaveToPatient::class.java)
-                intentDoctor.putExtra(PRESION,presionNueva)
-                startActivity(intentDoctor)
+                if(camposLlenos()){
+                    //ver si tenemos conexion a internet
+                    if(NetworkConnection.isNetworkAvailable(this)){
+                        presionNueva=Presion(text_identifier.text.toString(),text_pressure_diastolic.text.toString().toDouble(),text_pressure_systolic.text.toString().toDouble(),text_diastolic_manual.text.toString().toDouble(),text_systolic_manual.text.toString().toDouble(),"")
+                        //Preparamos intent
+                        var intentDoctor = Intent(this, SaveToPatient::class.java)
+                        intentDoctor.putExtra(PRESION,presionNueva)
+                        startActivity(intentDoctor)
+                    }else{
+                        Toast.makeText(applicationContext, "No se tiene conexion a internet", Toast.LENGTH_LONG).show()
+                    }
+
+                }else{
+                    Toast.makeText(applicationContext, "No se tienen los campos llenos", Toast.LENGTH_LONG).show()
+                }
+
+
             }
         }
     }

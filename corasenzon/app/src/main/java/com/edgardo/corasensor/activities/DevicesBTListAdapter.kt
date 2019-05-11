@@ -28,6 +28,7 @@ import com.edgardo.corasensor.R
 import kotlinx.android.synthetic.main.row_devices_bt.view.*
 import java.util.ArrayList
 
+//Adapter para desplegar los dispositivos encontrados via Bluetooth
 class DevicesBTListAdapter(
         context: Context,
         val resourceId: Int,

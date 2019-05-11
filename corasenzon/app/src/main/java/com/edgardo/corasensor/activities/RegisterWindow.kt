@@ -34,7 +34,7 @@ class RegisterWindow : AppCompatActivity() {
         var year = c.get(Calendar.YEAR)
         var month = c.get(Calendar.MONTH)
         var day = c.get(Calendar.DAY_OF_MONTH)
-
+        //Declaración de variables para almacenar datos del calendario
         var dia:Int = 0
         var mes:Int = 0
         var anio:Int = 0
@@ -79,9 +79,11 @@ class RegisterWindow : AppCompatActivity() {
         //listener para mostrar la fecha de nacimiento
         buttonFechaNacimiento.setOnClickListener {
             val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, mYear, mMonth, mDay ->
+                //Usar los datos recibidos del calendario para almacenarlos
                 dia = mDay
                 mes = mMonth + 1
                 anio = mYear
+                //Imprimir los datos recibidos del calendario
                 tvFechaN.setText(dia.toString() + "/" + mes.toString() + "/" + anio.toString())}, year, month, day)
             dpd.show()
         }

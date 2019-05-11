@@ -18,20 +18,6 @@ class MyInfoAct : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_info)
 
-        var text:String = ""
-        try
-        {
-            var fin = FileReader(File(this.filesDir, "email.txt"))
-            var c:Int?
-            do
-            {
-                c = fin.read()
-                text += c.toChar()
-            } while(c!=-1)
-        } catch (e:Exception)
-        {
-            print(e.message)
-        }
         //Declaracion de variables
         var imagenCodigoQr:ImageView= findViewById(R.id.imagenCodigoQR)
         var textNombre: TextView = findViewById(R.id.textFecha)
@@ -49,7 +35,7 @@ class MyInfoAct : AppCompatActivity() {
             textNombre.text=myUser.nombre+" "+myUser.apellido
             textEmail.text=myUser.email
             textSexo.text=myUser.sexo.toString()
-            textRango.text=myUser.rango.toString()
+            textRango.text=myUser.rango
             textFechaNacimiento.text=myUser.fechaNacimiento
             //Usar picaso para generar el codigo QR para ponerlo en el image view
             //cargar imagen con picaso

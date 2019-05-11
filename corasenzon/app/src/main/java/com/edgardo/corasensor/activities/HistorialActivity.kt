@@ -13,6 +13,7 @@ import com.edgardo.corasensor.Clases.Presion
 import com.edgardo.corasensor.Clases.Usuario
 import com.edgardo.corasensor.R
 import kotlinx.android.synthetic.main.activity_historial.*
+import kotlinx.android.synthetic.main.activity_informacion_paciente.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
@@ -47,13 +48,11 @@ class HistorialActivity : AppCompatActivity() {
         }
         //agregar accion para el boton de enviar datos por excel
         botonExcel.setOnClickListener {
-
             Toast.makeText(this,"Loading...",Toast.LENGTH_SHORT).show()
             //Ver si el usuario no es nulo
             if(newUser!=null){
                 botonExcel.isEnabled = false
                 sendUserHistory(newUser)
-                botonExcel.isEnabled = true
             }
             else{
                 //Desplegar mensaje de error en TOAST!!
@@ -154,9 +153,13 @@ class HistorialActivity : AppCompatActivity() {
                         if (objetoJSON.has("error")){
                             //desplegar toast con mensaje de error del servidor
                             Toast.makeText(this@HistorialActivity, objetoJSON.getString("error"), Toast.LENGTH_LONG).show()
+                            //Habilitar el boton
+                            buttonExcel.isEnabled = true
                         }
                         else{
                             Toast.makeText(this@HistorialActivity, objetoJSON.getString("success"), Toast.LENGTH_LONG).show()
+                            //habilitar el boton
+                            buttonExcel.isEnabled = true
                         }
                     }
                 }
