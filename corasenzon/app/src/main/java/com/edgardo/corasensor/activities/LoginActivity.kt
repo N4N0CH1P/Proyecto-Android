@@ -9,6 +9,7 @@ import android.app.Activity
 import android.content.Intent
 import android.text.Editable
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -33,6 +34,7 @@ import java.net.URLEncoder
 class LoginActivity : AppCompatActivity() {
     lateinit var inputEmail: EditText
     lateinit var inputPassword: EditText
+    lateinit var gsc:GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
 
         //Variables que ayudan a conectar a los Servicios de google play
         val gso:GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
-        val gsc:GoogleSignInClient = GoogleSignIn.getClient(this,gso)
+        gsc = GoogleSignIn.getClient(this,gso)
 
         val googleButton:SignInButton = findViewById(R.id.button_google)
         googleButton.setSize(SignInButton.SIZE_STANDARD)
@@ -56,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
         googleButton.setOnClickListener{
             when(it.id)
             {
-                R.id.button_google -> signIn(gsc)
+                R.id.button_google -> googleSignIn()
             }
         }
         //Logica para hacer loign cuando se de click al boton de login
@@ -77,11 +79,13 @@ class LoginActivity : AppCompatActivity() {
             startActivityForResult(intent,0)
         }
     }
-    private fun signIn(gsc:GoogleSignInClient)
+
+    private fun googleSignIn()
     {
         val signInIntent:Intent = gsc.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
+
     private fun loginUsuario(email:String, password:String){
         //Declaracion de variables
         var parametrosPOST = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8")
@@ -139,9 +143,12 @@ class LoginActivity : AppCompatActivity() {
     private fun handleSignInResult(task: Task<GoogleSignInAccount>){
         try{
             val account:GoogleSignInAccount? = task.getResult(ApiException::class.java)
+            ingresarRegistro(account)
         }
         catch(e:ApiException){
-            Log.w(TAG,"signInResult:failed code=" + e.statusCode)
+            Log.w(TAG,"signInResult:failed code = ${e.statusCode}: ${e.message}")
+            if(e.statusCode == 12500)
+                Toast.makeText(this,"No tiene Google Play Services actualizado", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -167,7 +174,17 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private  fun ingresarRegistro(account: GoogleSignInAccount?){
+        val intent:Intent = Intent(this,RegisterWindow::class.java)
+
+        intent.putExtra(account?.givenName,NAME)
+        intent.putExtra(account?.familyName,LASTNAME)
+        intent.putExtra(account?.email,EMAIL)
+        startActivity(intent)
+    }
     companion object {
+        val LASTNAME:String = "lastname"
+        val NAME:String = "name"
         val EMAIL:String ="email"
         val PASSWORD:String = "password"
         val RC_SIGN_IN:Int = 1
