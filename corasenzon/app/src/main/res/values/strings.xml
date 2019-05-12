@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Scanner</string>
+    <string name="app_name">Corasenzon</string>
     <string name="namePar">Nombre</string>
     <string name="apellidoPar">Apellido</string>
     <string name="fechaPar">Fecha Nacimiento AAAAMMDD</string>
