@@ -23,9 +23,13 @@ import android.net.Network
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.IntegerRes
+import android.text.Editable
 import android.view.View
 import android.widget.*
 import com.edgardo.corasensor.R
+import com.edgardo.corasensor.activities.LoginActivity.Companion.EMAIL
+import com.edgardo.corasensor.activities.LoginActivity.Companion.LASTNAME
+import com.edgardo.corasensor.activities.LoginActivity.Companion.NAME
 import kotlinx.android.synthetic.main.activity_register_window.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -41,9 +45,17 @@ class RegisterWindow : AppCompatActivity() {
     //Declaracion de variables
     lateinit var password:String
     lateinit var email:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_window)
+        //Se recibe datos del intent de LOGIN si es que se hizo sign in con google
+        val intent: Intent = intent
+        if(intent.extras != null){
+            editNombre.setText(intent.getStringExtra(NAME))
+            editApellido.setText(intent.getStringExtra(LASTNAME))
+            editEmail.setText(intent.getStringExtra(EMAIL))
+        }
         //Declaración de calendario
         var c = Calendar.getInstance()
         var year = c.get(Calendar.YEAR)
