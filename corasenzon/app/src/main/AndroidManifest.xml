@@ -37,7 +37,12 @@
         <activity android:name=".activities.InformacionPaciente" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.MyInfoAct" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.MisPacientesAct" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activities.RegisterWindow" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activities.RegisterWindow" android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="name.register.RegisterWindow" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.LoginActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.HistorialActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.MenuActivity" android:screenOrientation="portrait">
