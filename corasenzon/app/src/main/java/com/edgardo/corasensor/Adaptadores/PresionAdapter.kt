@@ -37,8 +37,8 @@ class PresionAdapter (private val context: Context, private val listaPresiones: 
 
         with (rowView){
             textFechaToma.text=presion.fechaPresion
-            textPresion.text=presion.presionSist.toString()+"/"+presion.presionDist.toString()
-            textPresionManual.text=presion.presionSistManual.toString()+"/"+presion.presionDistManual.toString()
+            textPresion.text=presion.presionDist.toString()+"/"+presion.presionSist.toString()
+            textPresionManual.text=presion.presionDistManual.toString()+"/"+presion.presionSistManual.toString()
         }
         return rowView
     }
