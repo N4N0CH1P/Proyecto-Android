@@ -185,13 +185,12 @@ class LoginActivity : AppCompatActivity() {
         }
         else if(requestCode == RC_SIGN_IN){
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            Toast.makeText(this,"Entro",Toast.LENGTH_SHORT).show()
             handleSignInResult(task)
         }
     }
 
     private  fun ingresarRegistro(account: GoogleSignInAccount?){
-        val intent:Intent = Intent(this,RegisterWindow::class.java)
+        val intent:Intent = Intent("name.register.RegisterWindow")
 
         intent.putExtra(NAME,account?.displayName)
         intent.putExtra(LASTNAME,account?.familyName)
