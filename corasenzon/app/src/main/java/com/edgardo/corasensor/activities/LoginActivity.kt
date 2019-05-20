@@ -192,7 +192,7 @@ class LoginActivity : AppCompatActivity() {
     private  fun ingresarRegistro(account: GoogleSignInAccount?){
         val intent:Intent = Intent("name.register.RegisterWindow")
 
-        intent.putExtra(NAME,account?.displayName)
+        intent.putExtra(NAME,account?.givenName)
         intent.putExtra(LASTNAME,account?.familyName)
         intent.putExtra(EMAIL,account?.email)
         startActivity(intent)
