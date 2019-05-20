@@ -205,8 +205,9 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/button_dont_save"
                     style="@style/Widget.AppCompat.Button.Colored"
+                    android:background="@drawable/button_background"
+                    android:id="@+id/button_dont_save"
                     android:layout_width="150dp"
                     android:layout_height="70dp"
                     android:layout_marginStart="16dp"
@@ -220,8 +221,9 @@
                     app:layout_constraintVertical_bias="0.131" />
 
                 <Button
-                    android:id="@+id/button_saveDoc"
                     style="@style/Widget.AppCompat.Button.Colored"
+                    android:background="@drawable/button_background"
+                    android:id="@+id/button_saveDoc"
                     android:layout_width="327dp"
                     android:layout_height="73dp"
                     android:layout_marginStart="16dp"
@@ -237,8 +239,9 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <Button
-                    android:id="@+id/button_save"
                     style="@style/Widget.AppCompat.Button.Colored"
+                    android:background="@drawable/button_background"
+                    android:id="@+id/button_save"
                     android:layout_width="150dp"
                     android:layout_height="70dp"
                     android:layout_marginTop="8dp"
